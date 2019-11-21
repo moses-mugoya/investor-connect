@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+ {% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{% static 'portal/assets/css/iofrm-style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static  'portal/assets/css/iofrm-theme9.css' %}">
+
+</head>
+
+<body>
+{% load crispy_forms_tags %}
+    <div class="form-body">
+        <div class="row">
+            <div class="img-holder">
+                <div class="bg"></div>
+                <div class="info-holder">
+                    <h3>Start, Build, Grow, Scale.</h3>
+                    <p>Centinum Group is the best way to get your venture known, funded and supported by people around the globe.</p>
+                    <img src="{% static 'portal/assets/img/graphic5.svg' %}" alt="image">
+                </div>
+            </div>
+            <div class="form-holder">
+                <div class="form-content">
+                    <div class="form-items" style="max-width:380px">
+                        <div class="website-logo-inside">
+                            <a href="index.html">
+                                <!-- <div class="logo"> --
+                                    <img class="logo-size" src="<?= bs() ?>public/assets/img/login.png" alt="">
+                                -- </div> -->
+                            </a>
+                        </div>
+                        <div class="page-links">
+                            <a href="{% url 'loginApp:login'  %}">Login</a
+                            >
+
+                                <a href="{% url 'account:register' %}" class="active">Register</a>
+
+                        </div>
+                        {% if user_form.errors %}
+                        {% for field in user_form %}
+                        {% for error in field.errors %}
+                        <div class="alert alert-danger">
+                            <strong>{{ error|escape }}</strong>
+                        </div>
+                        {% endfor %}
+                        {% endfor %}
+                        {% endif %}
+                        <form action="." method="post">
+                            {% csrf_token %}
+                            {% include 'account/form_template3.html' %}
+
+                            <div class="form-button">
+                                <button id="submit" type="submit" class="ibtn">Register</button>
+
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="http://brandio.io/envato/iofrm/html/js/jquery.min.js"></script>
+    <script src="http://brandio.io/envato/iofrm/html/js/popper.min.js"></script>
+    <script src="http://brandio.io/envato/iofrm/html/js/bootstrap.min.js"></script>
+    <script src="{% static 'portal/assets/js/main.js' %}"></script>
+</body>
+
+</html>
+
+
+
+
+
+
+

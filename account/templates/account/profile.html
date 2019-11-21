@@ -1,0 +1,981 @@
+{% extends 'portal/base.html'  %}
+
+{% block title %} My Profile {% endblock %}
+
+{% block body %}
+{% load static %}
+{% load crispy_forms_tags %}
+<ol class="breadcrumb" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+
+    <li><a href="{% url 'portal:home' %}">Home</a></li>
+    <li class="active"><a href="{% url 'account:profile' %}">My Profile</a></li>
+
+</ol>
+<div class="container-fluid">
+    {% if messages %}
+    {% for message in messages %}
+    {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+    <div class="alert alert-danger">
+        <strong>{{ message|escape }}</strong>
+    </div>
+    {% else %}
+    <div class="alert alert-success">
+        <strong>{{ message|escape }}</strong>
+    </div>
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+    <div data-widget-group="group1">
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="panel panel-profile">
+                    <div class="panel-body">
+                        <img src="{% if profile.profile_image %}{{profile.profile_image.url}}{%else%}{% static 'portal/assets/img/profile.png' %}{% endif %}" class="img-circle">
+                        <div class="name">{{request.user.first_name}} {{request.user.last_name}}</div>
+                        <div class="info">{{profile.profession}}</div>
+                        <!--<ul class="list-inline text-center">-->
+                            <!--<li><a href="#" class="profile-facebook-icon"><i-->
+                                    <!--class="ti ti-facebook"></i></a></li>-->
+                            <!--<li><a href="#" class="profile-twitter-icon"><i-->
+                                    <!--class="ti ti-twitter"></i></a></li>-->
+                            <!--<li><a href="#" class="profile-dribbble-icon"><i-->
+                                    <!--class="ti ti-dribbble"></i></a></li>-->
+                        <!--</ul>-->
+                    </div>
+                </div><!-- panel -->
+                <div class="list-group list-group-alternate mb-n nav nav-tabs">
+                    <a href="#tab-about" role="tab" data-toggle="tab"
+                       class="list-group-item active"><i class="ti ti-user"></i> About</a>
+                    <a href="#tab-report" role="tab" data-toggle="tab"
+                       class="list-group-item"><i class="ti ti-hand-open"></i> Make A Report</a>
+                    {% if not request.user.is_service_provider %}
+                    <a href="#tab-services" role="tab" data-toggle="tab"
+                       class="list-group-item"><i class="ti ti-view-list-alt"></i>My Services</a>
+                    {% endif %}
+                    {%if request.user.is_investor %}
+                    <a href="#tab-stat_invest" role="tab" data-toggle="tab" class="list-group-item"><i
+                            class="ti ti-view-list-alt"></i> My Start up Investments</a>
+                    <a href="#tab-idea_invest" role="tab" data-toggle="tab" class="list-group-item"><i
+                            class="ti ti-view-list-alt"></i> My Idea investments</a>
+                    {% elif request.user.is_entrepreneur %}
+                     <a href="#tab-add2" role="tab" data-toggle="tab" class="list-group-item"><i
+                            class="ti ti-plus"></i>Add a new Start up</a>
+                    <a href="#tab-biz" role="tab" data-toggle="tab" class="list-group-item"><i
+                            class="ti ti-view-list-alt"></i> My Business start ups</a>
+                    <a href="#tab_biz_req" role="tab" data-toggle="tab" class="list-group-item"><i
+                            class="ti ti-view-list-alt"></i> My Investment Requests</a>
+                    {% elif request.user.is_innovator%}
+                    <a href="#tab-add" role="tab" data-toggle="tab" class="list-group-item"><i
+                            class="ti ti-plus"></i>Add a new Idea</a>
+                    <a href="#tab-idea" role="tab" data-toggle="tab" class="list-group-item"><i
+                            class="ti ti-view-list-alt"></i> My Ideas</a>
+                    <a href="#tab_idea_req" role="tab" data-toggle="tab" class="list-group-item"><i
+                            class="ti ti-view-list-alt"></i> My Investment Requests</a>
+                    {% elif request.user.is_partner %}
+                    <a href="#tab-partner-add-notes" role="tab" data-toggle="tab" class="list-group-item"><i
+                            class="ti ti-plus"></i>Add Notes</a>
+                    <a href="#tab-partner-notes" role="tab" data-toggle="tab" class="list-group-item"><i
+                            class="ti ti-view-list-alt"></i>My Notes</a>
+                    {% if request.user in patner %}
+                    <a href="#tab-partner-edit" role="tab" data-toggle="tab" class="list-group-item"><i
+                            class="ti ti-pencil"></i>Edit My Company Details</a>
+                    {% else %}
+                    <a href="#tab-partner" role="tab" data-toggle="tab" class="list-group-item"><i
+                            class="ti ti-plus"></i>Add Company Details</a>
+                    {% endif %}
+                    {% endif %}
+                    {% if request.user.is_service_provider %}
+                    <a href="#tab-services-provider" role="tab" data-toggle="tab"
+                       class="list-group-item"><i class="ti ti-view-list-alt"></i>My Services</a>
+                    {% if request.user in provider %}
+                    <a href="#tab-provider-edit" role="tab" data-toggle="tab" class="list-group-item"><i
+                            class="ti ti-pencil"></i>Edit My Company Details</a>
+                    {% else %}
+                    <a href="#tab-provider" role="tab" data-toggle="tab" class="list-group-item"><i
+                            class="ti ti-plus"></i>Add Company Details</a>
+                    {% endif %}
+                    {% endif %}
+                    <a href="#tab-edit" role="tab" data-toggle="tab" class="list-group-item"><i
+                            class="ti ti-pencil"></i> Edit Profile</a>
+                    <a href="{% url 'password_change' %}" class="list-group-item"><i
+                            class="ti ti-pencil"></i> Change Password</a>
+                </div>
+            </div><!-- col-sm-3 -->
+            <div class="col-sm-9">
+                <div class="tab-content">
+                    <div class="tab-pane" id="tab-stat_invest">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h2>My Start up investments </h2><br>
+                                <P>NB. Decline investment requests will disappear from this list.</P>
+                            </div>
+                            <div class="panel-body">
+                                <div class="table-responsive">
+                                    <table class="table m-n">
+                                        <thead>
+                                        <tr>
+                                            <th style="font-size:20px;font-weight:bold">Start up name</th>
+                                            <th style="font-size:20px;font-weight:bold">Pitch</th>
+                                            <th style="font-size:20px;font-weight:bold">Status</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for biz_invest in biz_investments %}
+                                        <tr>
+                                            <td><strong><a href="{{biz_invest.business.get_absolute_url}}">{{biz_invest.business}}</a></strong></td>
+                                            <td>
+                                               {{biz_invest.business.pitch}}
+                                            </td>
+                                            <td>
+                                                {% if biz_invest.approved %}<span style="color:green">Approved</span>{% else %}<span style="color:red">Pending Approval</span>{% endif %}
+                                            </td>
+                                        </tr>
+                                        {% empty %}
+                                        <p>You haven't made investments on any start up</p>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div><!-- /.table-responsive -->
+                            </div> <!-- /.panel-body -->
+                        </div>
+                    </div> <!-- #tab-projects -->
+
+                    <div class="tab-pane" id="tab-idea_invest">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h2>My Idea investments </h2><br>
+                                <P>NB. Decline investment requests will disappear from this list.</P>
+                            </div>
+                            <div class="panel-body">
+                                <div class="table-responsive">
+                                    <table class="table m-n">
+                                        <thead>
+                                        <tr>
+                                            <th style="font-size:20px;font-weight:bold">Idea name</th>
+                                            <th style="font-size:20px;font-weight:bold">Description</th>
+                                            <th style="font-size:20px;font-weight:bold">Status</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for idea_invest in investments %}
+                                        <tr>
+                                            <td><strong><a href="{{idea_invest.idea.get_absolute_url}}">{{idea_invest.idea}}</a></strong></td>
+                                            <td>
+                                               {{idea_invest.idea.description}}
+                                            </td>
+                                             <td>
+                                                {% if idea_invest.approved %}<span style="color:green">Approved</span>{% else %}<span style="color:red">Pending Approval</span>{% endif %}
+                                            </td>
+                                        </tr>
+                                        {% empty %}
+                                        <p>You haven't made any investments on any idea</p>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div><!-- /.table-responsive -->
+                            </div> <!-- /.panel-body -->
+                        </div>
+                    </div> <!-- #tab-projects -->
+
+                    <div class="tab-pane" id="tab_biz_req">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h2>My Investment Requests</h2>
+                            </div>
+                            <div class="panel-body">
+                                <div class="table-responsive">
+                                    <table class="table m-n">
+                                        <tbody>
+                                        {% for request in biz_investment_requests %}
+                                        {% if request.approved %}
+                                        <li class="media notification-message">
+                                            <a href="{{request.investor.profiles.get_absolute_url}}">
+                                                <div class="media-left">
+                                                    <img class="img-circle avatar"
+                                                         src="{% if request.investor.profiles.profile_image %}{{request.investor.profiles.profile_image.url}}{%else%}{% static 'portal/assets/img/profile.png' %}{% endif %}"
+                                                         alt=""/>&nbsp;&nbsp;<span>{{request.investor}}</span> is now an investor in your start up.
+                                                </div>
+                                            </a>
+                                        </li>
+                                        {% else %}
+                                        <li class="media notification-message">
+                                            <a href="{{request.investor.profiles.get_absolute_url}}">
+                                                <div class="media-left">
+                                                    <img class="img-circle avatar"
+                                                         src="{% if request.investor.profiles.profile_image %}{{request.investor.profiles.profile_image.url}}{%else%}{% static 'portal/assets/img/profile.png' %}{% endif %}"
+                                                         alt=""/>&nbsp;&nbsp;<span>{{request.investor}}</span> is interested in Investing in your start up.
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <a style="border-radius:20px" href="{% url 'portal:accept_biz' request.id %}" class="btn btn-success">Accept</a>&nbsp;<a href="{% url 'portal:decline_biz' request.id %}" style="border-radius:20px"  class="btn btn-danger">Decline</a>
+                                        {% endif %}
+                                        {% empty %}
+                                        <p>You don't have any investment requests.</p>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div><!-- /.table-responsive -->
+                            </div> <!-- /.panel-body -->
+                        </div>
+                    </div> <!-- #tab-projects -->
+
+                    <div class="tab-pane" id="tab_idea_req">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h2>My Investment Requests</h2>
+                            </div>
+                            <div class="panel-body">
+                                <div class="table-responsive">
+                                    <table class="table m-n">
+                                        <tbody>
+                                        {% for request in idea_investment_requests %}
+                                        {% if request.approved %}
+                                        <li class="media notification-message">
+                                            <a href="{{request.investor.profiles.get_absolute_url}}">
+                                                <div class="media-left">
+                                                    <img class="img-circle avatar"
+                                                         src="{% if request.investor.profiles.profile_image %}{{request.investor.profiles.profile_image.url}}{%else%}{% static 'portal/assets/img/profile.png' %}{% endif %}"
+                                                         alt=""/>&nbsp;&nbsp;<span>{{request.investor}}</span> is now an investor of your idea.
+                                                </div>
+                                            </a>
+                                        </li>
+                                        {% else %}
+                                        <li class="media notification-message">
+                                            <a href="{{request.investor.profiles.get_absolute_url}}">
+                                                <div class="media-left">
+                                                    <img class="img-circle avatar"
+                                                         src="{% if request.investor.profiles.profile_image %}{{request.investor.profiles.profile_image.url}}{%else%}{% static 'portal/assets/img/profile.png' %}{% endif %}"
+                                                         alt=""/>&nbsp;&nbsp;<span>{{request.investor}}</span> is interested in Investing in your idea.
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <br>
+                                        <a style="border-radius:20px" href="{% url 'portal:accept_idea' request.id %}" class="btn btn-success">Accept</a>&nbsp;<a href="{% url 'portal:decline_idea' request.id %}" style="border-radius:20px"  class="btn btn-danger">Decline</a>
+                                        {% endif %}
+                                        {% empty %}
+                                        <p>You don't have any requests at the moment</p>
+                                        {% endfor %}
+
+                                        </tbody>
+                                    </table>
+                                </div><!-- /.table-responsive -->
+                            </div> <!-- /.panel-body -->
+                        </div>
+                    </div> <!-- #tab-projects -->
+                    <div class="tab-pane" id="tab-partner-notes">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h2>My Notes</h2>
+                            </div>
+                            <div class="panel-body">
+                                <div class="table-responsive">
+                                    <table class="table m-n">
+                                        <tbody>
+                                        {% for note in payment_notes %}
+                                        <tr>
+                                            <td><strong><a href="{{idea_invest.idea.get_absolute_url}}">{{note.name}}</a></strong></td>
+                                             <td>
+                                                {% if note.paid %}<span style="color:green">Paid</span>
+                                                {% else %}
+                                                 <span style="color:red">Pending Payment</span> <br><br>
+                                                 <a style="border-radius:20px" href="#" class="btn btn-info">Edit</a>&nbsp; <a href="#" style="border-radius:20px"  class="btn btn-success">Make Payment</a>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                        {% empty %}
+                                        <p>You haven't added any notes yet</p>
+                                        {% endfor %}
+
+                                        </tbody>
+                                    </table>
+                                </div><!-- /.table-responsive -->
+                            </div> <!-- /.panel-body -->
+                        </div>
+                    </div> <!-- #tab-projects -->
+
+                     <div class="tab-pane" id="tab-services">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h2>My Services</h2>
+                            </div>
+                            <div class="panel-body">
+                                <div class="table-responsive">
+                                    <table class="table m-n">
+                                        <tbody>
+                                        {% for service in services %}
+                                        <tr>
+                                            <td><strong><a href="{{idea_invest.idea.get_absolute_url}}">{{service.service_name}}</a></strong></td>
+                                             <td>
+                                                {% if service.finished %}
+                                                 <span style="color:blue">Finished</span>
+                                                {% else %}
+                                                {% if service.accepted and service.service_provider != None%}
+                                                 <span style="color:green">Ongoing</span>
+                                                 <p>You have been assigned this service provider <span style="color:blue">{{service.service_provider}}</span></p>
+                                                 <p>Amount to pay: $<span style="color:green">{{service.service_cost}}</span>, please <a href="#">pay here</a></p>
+                                                 <a href="{% url 'portal:service_chat' service.id %}">Visit communication timeline</a><br><br><br>
+                                                 <a href="{% url 'portal:marked_finished' service.id %}" class="btn btn-primary">Mark As Finished</a>
+                                                {% else %}
+                                                 <span style="color:red">Pending approval</span>
+                                                {% endif %}
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                        {% empty %}
+                                        <p>You haven't requested any service yet</p>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div><!-- /.table-responsive -->
+                            </div> <!-- /.panel-body -->
+                        </div>
+                    </div> <!-- #tab-projects -->
+                    <div class="tab-pane" id="tab-services-provider">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h2>My Services</h2>
+                            </div>
+                            <div class="panel-body">
+                                <div class="table-responsive">
+                                    <table class="table m-n">
+                                        <tbody>
+                                        {% for service in provider_services %}
+                                        <tr>
+                                            <td><strong><a href="#">{{service.service_name}}</a></strong></td>
+                                             <td>
+                                                {% if service.finished %}
+                                                 <span style="color:blue">Finished</span>
+                                                {% else %}
+                                                {% if service.accepted and service.service_provider != None%}
+                                                 <span style="color:green">Ongoing</span>
+                                                 <p>You have been assigned to client <span style="color:blue">{{service.client}}</span></p>
+                                                 <p>Your expected payment: $<span style="color:green">{{service.sp_payment}}</span></p>
+                                                 <a href="{% url 'portal:service_chat' service.id %}">Visit communication timeline</a><br><br><br>
+
+                                                {% else %}
+                                                 <span style="color:red">Pending approval</span>
+                                                {% endif %}
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                        {% empty %}
+                                        <p>You haven't been assigned any service yet</p>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div><!-- /.table-responsive -->
+                            </div> <!-- /.panel-body -->
+                        </div>
+                    </div> <!-- #tab-projects -->
+
+
+                    <div class="tab-pane" id="tab-biz">
+                        <div class="panel panel-default">
+                            {% if profile.paid %}
+                            <div class="panel-heading">
+                                <h2>My Business Start ups </h2>
+                            </div>
+                            <div class="panel-body">
+                                <div class="table-responsive">
+                                    <table class="table m-n">
+                                        <thead>
+                                        <tr>
+                                            <th style="font-size:20px;font-weight:bold">Start up name</th>
+                                            <th style="font-size:20px;font-weight:bold">Pitch</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for biz in user_biz %}
+                                        <tr>
+                                            <td><strong><a href="{{biz.get_absolute_url}}">{{biz.name}}</a></strong></td>
+                                            <td>
+                                               {{biz.pitch}}
+                                            </td>
+                                        </tr>
+                                        {% empty %}
+                                        <p>You haven't added any business start up yet</p>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div><!-- /.table-responsive -->
+                            </div> <!-- /.panel-body -->
+                            {% else %}
+                            <div class="panel-heading">
+                                <h2>Upgrade to PRO</h2>
+                            </div>
+                            <div class="panel-body">
+                                <p>Please upgrade to PRO to see the investors interested in your start ups</p>
+                                <a href="{% url 'portal:plans' %}" class="btn btn-primary">Upgrade</a>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div> <!-- #tab-projects -->
+
+                    <div class="tab-pane" id="tab-idea">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h2>My Ideas</h2>
+                            </div>
+                            <div class="panel-body">
+                                <div class="table-responsive">
+                                    <table class="table m-n">
+                                        <thead>
+                                        <tr>
+                                            <th style="font-size:20px;font-weight:bold">Idea Name</th>
+                                            <th style="font-size:20px;font-weight:bold">Description</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for ide in user_idea %}
+                                        <tr>
+                                            <td><strong><a href="{{ide.get_absolute_url}}">{{ide.name}}</a></strong></td>
+                                            <td>
+                                               {{ide.description}}
+                                            </td>
+                                        </tr>
+                                        {% empty %}
+                                        <p>You haven't added any ideas yet</p>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div><!-- /.table-responsive -->
+                            </div> <!-- /.panel-body -->
+                        </div>
+                    </div> <!-- #tab-projects -->
+
+                    <div class="tab-pane active" id="tab-about">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h2>About</h2>
+                            </div>
+                            <div class="panel-body">
+                                <div class="about-area">
+                                    <h4>Bio</h4>
+                                    <p>{{profile.bio}}</p>
+                                </div>
+                                <div class="about-area">
+                                    <h4>Basic Information</h4>
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <tbody>
+                                            <tr>
+                                                <th>Email</th>
+                                                <td><a href="#">{{request.user.email}}</a></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Phone</th>
+                                                <td>{{profile.phone_number}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Profession</th>
+                                                <td>{{profile.profession}}</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="about-area">
+                                    <h4>Personal Information</h4>
+                                    <div class="table-responsive">
+                                        <table class="table about-table">
+                                            <tbody>
+                                            <tr>
+                                                <th>Full Name</th>
+                                                <td>{{request.user.first_name}} {{request.user.last_name}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>City</th>
+                                                <td>{{profile.town}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Country</th>
+                                                <td>{{profile.country}}</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--<div class="tab-pane" id="tab-timeline">-->
+                        <!--<div class="panel">-->
+                            <!--<div class="panel-heading">-->
+                                <!--<h2>Timeline</h2>-->
+                            <!--</div>-->
+                            <!--<div class="panel-body">-->
+                                <!--<div class="row">-->
+                                    <!--<div class="col-md-12">-->
+                                        <!--<ul class="timeline">-->
+                                            <!--<li class="timeline-primary">-->
+                                                <!--<div class="timeline-icon"><i-->
+                                                        <!--class="ti ti-pencil"></i></div>-->
+                                                <!--<div class="timeline-body">-->
+                                                    <!--<div class="timeline-header">-->
+                                                        <!--<span class="author">Posted by <a-->
+                                                                <!--href="#">David Tennant</a></span>-->
+                                                        <!--<span class="date">Monday, November 21, 2013</span>-->
+                                                    <!--</div>-->
+                                                    <!--<div class="timeline-content">-->
+                                                        <!--<h4>Consectetur Adipisicing Elit</h4>-->
+                                                        <!--<p>Lorem ipsum dolor sit amet, consectetur-->
+                                                            <!--adipisicing elit. Officia, officiis,-->
+                                                            <!--molestiae, deserunt asperiores-->
+                                                            <!--architecto ut vel repudiandae dolore-->
+                                                            <!--inventore nesciunt necessitatibus-->
+                                                            <!--doloribus ratione facere consectetur-->
+                                                            <!--suscipit!</p>-->
+                                                    <!--</div>-->
+                                                <!--</div>-->
+                                            <!--</li>-->
+                                            <!--<li class="timeline-info">-->
+                                                <!--<div class="timeline-icon"><i-->
+                                                        <!--class="ti ti-heart"></i></div>-->
+                                                <!--<div class="timeline-body">-->
+                                                    <!--<div class="timeline-header">-->
+                                                        <!--<span class="author">Posted by <a-->
+                                                                <!--href="#">David Tennant</a></span>-->
+                                                        <!--<span class="date">Monday, November 21, 2013</span>-->
+                                                    <!--</div>-->
+                                                    <!--<div class="timeline-content">-->
+                                                        <!--<h4>Consectetur Adipisicing Elit</h4>-->
+                                                        <!--<p>Lorem ipsum dolor sit amet, consectetur-->
+                                                            <!--adipisicing elit. Officia, officiis,-->
+                                                            <!--molestiae, deserunt asperiores-->
+                                                            <!--architecto ut vel repudiandae dolore-->
+                                                            <!--inventore nesciunt necessitatibus-->
+                                                            <!--doloribus ratione facere consectetur-->
+                                                            <!--suscipit!</p>-->
+                                                    <!--</div>-->
+                                                <!--</div>-->
+                                            <!--</li>-->
+                                            <!--<li class="timeline-warning">-->
+                                                <!--<div class="timeline-icon"><i-->
+                                                        <!--class="ti ti-camera"></i></div>-->
+                                                <!--<div class="timeline-body">-->
+                                                    <!--<div class="timeline-header">-->
+                                                        <!--<span class="author">Posted by <a-->
+                                                                <!--href="#">David Tennant</a></span>-->
+                                                        <!--<span class="date">Monday, November 21, 2013</span>-->
+                                                    <!--</div>-->
+                                                    <!--<div class="timeline-content">-->
+                                                        <!--<h4>Consectetur Adipisicing Elit</h4>-->
+                                                        <!--<ul class="list-inline">-->
+                                                            <!--<li><img-->
+                                                                    <!--src="http://placehold.it/300&text=Placeholder"-->
+                                                                    <!--alt=""-->
+                                                                    <!--class="pull-left img-thumbnail img-responsive clearfix"-->
+                                                                    <!--width="200"></li>-->
+                                                            <!--<li><img-->
+                                                                    <!--src="http://placehold.it/300&text=Placeholder"-->
+                                                                    <!--alt=""-->
+                                                                    <!--class="pull-left img-thumbnail img-responsive clearfix"-->
+                                                                    <!--width="200"></li>-->
+                                                        <!--</ul>-->
+                                                    <!--</div>-->
+                                                <!--</div>-->
+                                            <!--</li>-->
+                                            <!--<li class="timeline-danger">-->
+                                                <!--<div class="timeline-icon"><i-->
+                                                        <!--class="ti ti-home"></i></div>-->
+                                                <!--<div class="timeline-body">-->
+                                                    <!--<div class="timeline-header">-->
+                                                        <!--<span class="author">Posted by <a-->
+                                                                <!--href="#">David Tennant</a></span>-->
+                                                        <!--<span class="date">Monday, November 21, 2013</span>-->
+                                                    <!--</div>-->
+                                                    <!--<div class="timeline-content">-->
+                                                        <!--<h4>Consectetur Adipisicing Elit</h4>-->
+                                                        <!--<p>Lorem ipsum dolor sit amet, consectetur-->
+                                                            <!--adipisicing elit. Officia, officiis,-->
+                                                            <!--molestiae, deserunt asperiores-->
+                                                            <!--architecto ut vel repudiandae dolore-->
+                                                            <!--inventore nesciunt necessitatibus-->
+                                                            <!--doloribus ratione facere consectetur-->
+                                                            <!--suscipit!</p>-->
+                                                    <!--</div>-->
+                                                <!--</div>-->
+                                            <!--</li>-->
+                                        <!--</ul>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+
+                    <!--<div class="tab-pane" id="tab-photos">-->
+                        <!--<div class="panel">-->
+                            <!--<div class="panel-heading">-->
+                                <!--<h2>Photos</h2>-->
+                            <!--</div>-->
+                            <!--<div class="panel-body profile-photos">-->
+                                <!--<div class="row">-->
+                                    <!--<div class="col-md-3">-->
+                                        <!--<img src="http://placehold.it/300&text=Placeholder" alt=""-->
+                                             <!--class="img-thumbnail img-responsive mb-xl">-->
+                                    <!--</div>-->
+                                    <!--<div class="col-md-3">-->
+                                        <!--<img src="http://placehold.it/300&text=Placeholder" alt=""-->
+                                             <!--class="img-thumbnail img-responsive mb-xl">-->
+                                    <!--</div>-->
+                                    <!--<div class="col-md-3">-->
+                                        <!--<img src="http://placehold.it/300&text=Placeholder" alt=""-->
+                                             <!--class="img-thumbnail img-responsive mb-xl">-->
+                                    <!--</div>-->
+                                    <!--<div class="col-md-3">-->
+                                        <!--<img src="http://placehold.it/300&text=Placeholder" alt=""-->
+                                             <!--class="img-thumbnail img-responsive mb-xl">-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                                <!--<div class="row">-->
+                                    <!--<div class="col-md-3">-->
+                                        <!--<img src="http://placehold.it/300&text=Placeholder" alt=""-->
+                                             <!--class="img-thumbnail img-responsive mb-xl">-->
+                                    <!--</div>-->
+                                    <!--<div class="col-md-3">-->
+                                        <!--<img src="http://placehold.it/300&text=Placeholder" alt=""-->
+                                             <!--class="img-thumbnail img-responsive mb-xl">-->
+                                    <!--</div>-->
+                                    <!--<div class="col-md-3">-->
+                                        <!--<img src="http://placehold.it/300&text=Placeholder" alt=""-->
+                                             <!--class="img-thumbnail img-responsive mb-xl">-->
+                                    <!--</div>-->
+                                    <!--<div class="col-md-3">-->
+                                        <!--<img src="http://placehold.it/300&text=Placeholder" alt=""-->
+                                             <!--class="img-thumbnail img-responsive mb-xl">-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                    <div class="tab-pane" id="tab-partner-add-notes">
+                        <div class="panel">
+                            <div class="panel-heading">
+                                <h2>Edit Profile</h2>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-10" style="margin:10px">
+                                        <form class="form-horizontal tabular-form" enctype="multipart/form-data" method="post">
+                                            {% csrf_token %}
+                                            {{partner_notes_form|crispy}}
+                                            <div class="panel-footer">
+                                                <div class="row">
+                                                    <div class="col-sm-8 col-sm-10">
+                                                        <input type="submit" class="btn-primary btn" value="Save">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane" id="tab-edit">
+                        <div class="panel">
+                            <div class="panel-heading">
+                                <h2>Edit Profile</h2>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-10" style="margin:10px">
+                                        <form class="form-horizontal tabular-form" enctype="multipart/form-data" method="post">
+                                            {% csrf_token %}
+                                            {{user_form|crispy}}
+                                            {{profile_form|crispy}}
+                                            <div class="panel-footer">
+                                                <div class="row">
+                                                    <div class="col-sm-8 col-sm-10">
+                                                        <input type="submit" class="btn-primary btn" value="Save" name="profile_data">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                   <div class="tab-pane" id="tab-add">
+                        <div class="panel">
+                            <div class="panel-heading">
+                                <h2>Add a new Idea</h2>
+                            </div>
+                            {% if messages %}
+                            {% for message in messages %}
+                            {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                            <div class="alert alert-danger">
+                                <strong>{{ message|escape }}</strong>
+                            </div>
+                            {% else %}
+                            <div class="alert alert-success">
+                                <strong>{{ message|escape }}</strong>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                            {% endif %}
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-10" style="margin:10px">
+                                        <form class="form-horizontal tabular-form" enctype="multipart/form-data" method="post">
+                                            {% csrf_token %}
+                                            {{idea_form2|crispy}}
+                                            <div class="panel-footer">
+                                                <div class="row">
+                                                    <div class="col-sm-8 col-sm-10">
+                                                        <input name="idea_add" type="submit" class="btn-primary btn" value="Save">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                     <div class="tab-pane" id="tab-partner">
+                        <div class="panel">
+                            <div class="panel-heading">
+                                <h2>Update details</h2>
+                            </div>
+                            {% if messages %}
+                            {% for message in messages %}
+                            {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                            <div class="alert alert-danger">
+                                <strong>{{ message|escape }}</strong>
+                            </div>
+                            {% else %}
+                            <div class="alert alert-success">
+                                <strong>{{ message|escape }}</strong>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                            {% endif %}
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-10" style="margin:10px">
+                                        <form class="form-horizontal tabular-form" enctype="multipart/form-data" method="post">
+                                            {% csrf_token %}
+                                            {{pat_form|crispy}}
+                                            <div class="panel-footer">
+                                                <div class="row">
+                                                    <div class="col-sm-8 col-sm-10">
+                                                        <input type="submit" class="btn-primary btn" value="Save">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                     <div class="tab-pane" id="tab-provider">
+                        <div class="panel">
+                            <div class="panel-heading">
+                                <h2>Update details</h2>
+                            </div>
+                            {% if messages %}
+                            {% for message in messages %}
+                            {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                            <div class="alert alert-danger">
+                                <strong>{{ message|escape }}</strong>
+                            </div>
+                            {% else %}
+                            <div class="alert alert-success">
+                                <strong>{{ message|escape }}</strong>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                            {% endif %}
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-10" style="margin:10px">
+                                        <form class="form-horizontal tabular-form" enctype="multipart/form-data" method="post">
+                                            {% csrf_token %}
+                                            {{pro_add_form|crispy}}
+                                            <div class="panel-footer">
+                                                <div class="row">
+                                                    <div class="col-sm-8 col-sm-10">
+                                                        <input type="submit" class="btn-primary btn" value="Save">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                     <div class="tab-pane" id="tab-partner-edit">
+                        <div class="panel">
+                            <div class="panel-heading">
+                                <h2>Update details</h2>
+                            </div>
+                            {% if messages %}
+                            {% for message in messages %}
+                            {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                            <div class="alert alert-danger">
+                                <strong>{{ message|escape }}</strong>
+                            </div>
+                            {% else %}
+                            <div class="alert alert-success">
+                                <strong>{{ message|escape }}</strong>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                            {% endif %}
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-10" style="margin:10px">
+                                        <form class="form-horizontal tabular-form" enctype="multipart/form-data" method="post">
+                                            {% csrf_token %}
+                                            {{pat_edit_form|crispy}}
+                                            <div class="panel-footer">
+                                                <div class="row">
+                                                    <div class="col-sm-8 col-sm-10">
+                                                        <input name="partner_edit" type="submit" class="btn-primary btn" value="Save">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="tab-report">
+                        <div class="panel">
+                            <div class="panel-heading">
+                                <h2>Update details</h2>
+                            </div>
+                            {% if messages %}
+                            {% for message in messages %}
+                            {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                            <div class="alert alert-danger">
+                                <strong>{{ message|escape }}</strong>
+                            </div>
+                            {% else %}
+                            <div class="alert alert-success">
+                                <strong>{{ message|escape }}</strong>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                            {% endif %}
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-10" style="margin:10px">
+                                        <form class="form-horizontal tabular-form" enctype="multipart/form-data" method="post">
+                                            {% csrf_token %}
+                                            {{report_form|crispy}}
+                                            <div class="panel-footer">
+                                                <div class="row">
+                                                    <div class="col-sm-8 col-sm-10">
+                                                        <input name="report" type="submit" class="btn-primary btn" value="Send">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="tab-provider-edit">
+                        <div class="panel">
+                            <div class="panel-heading">
+                                <h2>Update details</h2>
+                            </div>
+                            {% if messages %}
+                            {% for message in messages %}
+                            {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                            <div class="alert alert-danger">
+                                <strong>{{ message|escape }}</strong>
+                            </div>
+                            {% else %}
+                            <div class="alert alert-success">
+                                <strong>{{ message|escape }}</strong>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                            {% endif %}
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-10" style="margin:10px">
+                                        <form class="form-horizontal tabular-form" enctype="multipart/form-data" method="post">
+                                            {% csrf_token %}
+                                            {{provider_form|crispy}}
+                                            <div class="panel-footer">
+                                                <div class="row">
+                                                    <div class="col-sm-8 col-sm-10">
+                                                        <input name="provider_edit" type="submit" class="btn-primary btn" value="Save">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                     <div class="tab-pane" id="tab-add2">
+                        <div class="panel">
+                            <div class="panel-heading">
+                                <h2>Add a new Start up</h2><br>
+                                <p>Business not registered? request service <a href="{% url 'portal:centinum' %}">here</a></p>
+                            </div>
+                            {% if messages %}
+                            {% for message in messages %}
+                            {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                            <div class="alert alert-danger">
+                                <strong>{{ message|escape }}</strong>
+                            </div>
+                            {% else %}
+                            <div class="alert alert-success">
+                                <strong>{{ message|escape }}</strong>
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                            {% endif %}
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-10" style="margin:10px">
+                                        <form class="form-horizontal tabular-form" enctype="multipart/form-data" method="post">
+                                            {% csrf_token %}
+                                            {{business_form|crispy}}
+                                            <div class="panel-footer">
+                                                <div class="row">
+                                                    <div class="col-sm-8 col-sm-10">
+                                                        <input name="business_add" type="submit" class="btn-primary btn" value="Save">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div><!-- .tab-content -->
+            </div><!-- col-sm-8 -->
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
+

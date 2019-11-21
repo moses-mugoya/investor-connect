@@ -1,0 +1,46 @@
+{% extends 'portal/base.html' %}
+
+{% block title %} Plans {% endblock %}
+
+{% block body %}
+{% load static %}
+<ol class="breadcrumb">
+
+  <li class=""><a href="{% url 'portal:plans' %}">Plans</a></li>
+  <li class="active"><a href="{% url 'portal:plan_ent' %}">Plan Category Detail</a></li>
+
+</ol>
+<section id="team" class="pb-5">
+    <div class="container">
+        <div class="row col-md-6">
+            <h1 style="margin-left:10px">{{plan_cat.name}}</h1>
+            {% for plan in plans %}
+            {% if plan.price == current_user_subscription.plan.price %}
+            <p style="margin-left:10px">{{plan.name}}: <span style="color:green; font-weight:bold">${{plan.price}}</span></p>
+            <p style="margin-left:10px; color:#ee4242; font-weight:bold; font-style:italic; font-size:20px">This is your current plan</p>
+            <hr style="color:black; border-color:black; background-color:black">
+            {% else %}
+            <p style="margin-left:10px">{{plan.name}}: <span style="color:green; font-weight:bold">${{plan.price}}</span></p>
+            {% if not plan.name == 'free'%}
+            <form action="{% url 'portal:charge' %}" method="post">
+                {% csrf_token %}
+                <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                        data-key="{{ key }}"
+                        data-description="Centinum Payment"
+                        data-amount="3500"
+                        data-locale="auto"></script>
+            </form>
+            <hr style="color:black; border-color:black; background-color:black">
+            {% endif %}
+            {% endif %}
+            {% endfor %}
+            <p></p>
+
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+
+

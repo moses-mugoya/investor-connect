@@ -1,0 +1,44 @@
+{% extends 'portal/base.html'  %}
+
+{% block title %}Pay{% endblock %}
+
+{% block body %}
+{% load static %}
+{% load crispy_forms_tags %}
+<ol class="breadcrumb">
+
+    <li><a href="{% url 'portal:home_biz' %}">Home</a></li>
+    <li class="active"><a href="{% url 'portal:plans' %}">Plans</a></li>
+
+</ol>
+<div class="container-fluid">
+
+    <div data-widget-group="group1">
+        <div class="row">
+            <div class="tab-pane" id="join">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2>Choose your mode of payment</h2>
+                    </div>
+                    <div class="panel-body">
+                        <p>Please choose your mode of payment</p>
+                        <form action="{% url 'portal:charge' %}" method="post">
+                            {% csrf_token %}
+                            <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                                    data-key="{{ key }}"
+                                    data-description="Centinum Payment"
+                                    data-amount="3500"
+                                    data-locale="auto"></script>
+                        </form>
+                        <br>
+                        <a href="{% url 'portal:process' %}" class="btn btn-info" style="border-radius:5px">Pay with PayPal</a>
+                    </div> <!-- /.panel-body -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
+

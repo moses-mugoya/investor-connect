@@ -1,0 +1,46 @@
+{% extends 'portal/base.html' %}
+
+{% block title %} Search {% endblock %}
+
+{% block body %}
+{% load static %}
+{% load crispy_forms_tags %}
+<ol class="breadcrumb">
+
+    <li class=""><a href="{% url 'portal:home' %}">Home</a></li>
+    <li class="active"><a>Search</a></li>
+
+</ol>
+<section id="team" class="pb-5">
+    <div class="container col-md-10">
+        {% if query %}
+        <h1>Results containing "{{ query }}"</h1>
+        <h3>
+            {% with results.count as total_results %}
+            Found {{ total_results }} result{{ total_results|pluralize }}
+            {% endwith %}
+        </h3>
+        {% for user in results %}
+        <h4>{{ user.username }} <a style="border-radius:20px" class="btn btn-primary" href="{% url 'portal:add_member' business.id user.id  %}">Add {{user.username}}</a></h4>
+        {% empty %}
+        <p>There are no results for your query.</p>
+        {% endfor %}
+        <p><a href="{% url 'portal:search' business.id  %}">Search again</a></p>
+        {% else %}
+        <h1>Search for a user</h1>
+        <form action="." method="get">
+            {{ form|crispy }}
+            <input type="submit" class="btn btn-primary" value="Search">
+        </form>
+        {% endif %}
+
+    </div>
+
+
+</section>
+
+{% endblock %}
+
+
+
+

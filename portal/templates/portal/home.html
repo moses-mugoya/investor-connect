@@ -1,0 +1,52 @@
+{% extends 'portal/base.html' %}
+
+{% block title %} Home {% endblock %}
+
+{% block body %}
+{% load static %}
+<ol class="breadcrumb">
+
+  <li class=""><a href="{% url 'portal:home' %}">Home</a></li>
+  <li class="active"><a href="{% url 'portal:home' %}">All Ideas</a></li>
+
+</ol>
+<section id="team" class="pb-5">
+    <div class="container">
+        <!--<h5 class="section-title h1">All Ideas</h5>-->
+        <div class="row">
+          {% for idea in ideas %}
+            <!-- Team member -->
+            <div class="col-xs-12 col-sm-6 col-md-3">
+              <div class="frontside">
+                <div class="card">
+                  <div class="card-body text-center">
+                    <p><img class=" img-fluid"
+                            src="{% if idea.user.profiles.profile_image %}{{idea.user.profiles.profile_image.url}}{%else%}{% static 'portal/assets/img/profile.png' %}{% endif %}"
+                            alt="card image"
+                            style="margin-top:15px"
+                    ></p>
+                    <h4 class="card-title">{{idea.name}}</h4>
+                      <!--<h5>Looking for <span style="color:#222548">{{idea.interest}}</span></h5>-->
+                    {% with total_likes=idea.users_like.count users_like=idea.users_like.all%}
+                      <a class="btn" style="border-radius:20px; background-color:white;color: grey;border-color:grey">{{total_likes}} Like{{total_likes|pluralize}}</a>
+                    {% if request.user.profiles.paid %}
+                      <a href="{{idea.get_absolute_url}}" class="btn btn-primary" style="border-radius:20px"> View</a>
+                       {% else %}
+                      <a href="{% url 'portal:plans' %}" class="btn btn-primary" style="border-radius:20px">Upgrade To View</a>
+                      {% endif %}
+                    {% endwith %}
+
+                      <!--<p class="card-text">This is basic card with image on top, title, description and button.</p>-->
+                    <!--<a href="#" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i></a>-->
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+            <!-- ./Team member -->
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+

@@ -1,0 +1,523 @@
+{% extends 'portal/base.html'  %}
+
+{% block title %} Profile Detail {% endblock %}
+
+{% block body %}
+{% load static %}
+{% load crispy_forms_tags %}
+<ol class="breadcrumb">
+
+    <li><a href="{% url 'portal:home' %}">Home</a></li>
+    <li class="active"><a href="{% url 'account:profile_detail' user_profile.id %}">Profile Detail</a></li>
+
+</ol>
+<div class="container-fluid">
+
+    <div data-widget-group="group1">
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="panel panel-profile">
+                    <div class="panel-body">
+                        <img src="{% if user_profile.profile_image %}{{user_profile.profile_image.url}}{%else%}{% static 'portal/assets/img/profile.png' %}{% endif %}" class="img-circle">
+                        <div class="name">{{user_profile.user}}</div>
+                        <div class="info">{{user_profile.profession}}</div>
+                        <ul class="list-inline text-center">
+                            <!--<li><a href="#" class="profile-facebook-icon"><i-->
+                                    <!--class="ti ti-comment"></i></a></li>-->
+                            <!--&lt;!&ndash;<li><a href="#" class="profile-twitter-icon"><i&ndash;&gt;-->
+                                    <!--&lt;!&ndash;class="ti ti-twitter"></i></a></li>&ndash;&gt;-->
+                            <!--&nbsp;&nbsp;&nbsp;-->
+                            <!--<li><a href="#" class="profile-dribbble-icon"><i-->
+                                    <!--class="ti ti-dribbble"></i></a></li>-->
+                            <a href="{% url 'account:chat' user_profile.user %}" class="btn btn-primary" style="border-radius:20px"> Message</a>
+                        </ul>
+                    </div>
+                </div><!-- panel -->
+                <div class="list-group list-group-alternate mb-n nav nav-tabs">
+                    <a href="#tab-about" role="tab" data-toggle="tab"
+                       class="list-group-item active"><i class="ti ti-user"></i> About</a>
+                    {% if user_profile.user.is_entrepreneur %}
+                     <!--<a href="#tab-add2" role="tab" data-toggle="tab" class="list-group-item"><i-->
+                            <!--class="ti ti-plus"></i>Add a new Start up</a>-->
+                    <a href="#tab-biz" role="tab" data-toggle="tab" class="list-group-item"><i
+                            class="ti ti-view-list-alt"></i> Business start ups</a>
+                    {% elif user_profile.user.is_innovator %}
+                    <!--<a href="#tab-add" role="tab" data-toggle="tab" class="list-group-item"><i-->
+                            <!--class="ti ti-plus"></i>Add a new Idea</a>-->
+                    <a href="#tab-idea" role="tab" data-toggle="tab" class="list-group-item"><i
+                            class="ti ti-view-list-alt"></i>Ideas</a>
+                    {% endif %}
+                    <!--<a href="#tab-edit" role="tab" data-toggle="tab" class="list-group-item"><i-->
+                            <!--class="ti ti-pencil"></i> Edit Profile</a>-->
+                    <!--<a href="{% url 'password_change' %}" class="list-group-item"><i-->
+                            <!--class="ti ti-pencil"></i> Change Password</a>-->
+                </div>
+            </div><!-- col-sm-3 -->
+            <div class="col-sm-9">
+                <div class="tab-content">
+                    <div class="tab-pane" id="tab-stat_invest">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h2>My Start up investments </h2>
+                            </div>
+                            <div class="panel-body">
+                                <div class="table-responsive">
+                                    <table class="table m-n">
+                                        <thead>
+                                        <tr>
+                                            <th style="font-size:20px;font-weight:bold">Start up name</th>
+                                            <th style="font-size:20px;font-weight:bold">Pitch</th>
+                                            <th style="font-size:20px;font-weight:bold">Status</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for biz_invest in biz_investments %}
+                                        <tr>
+                                            <td><strong><a href="{{biz_invest.business.get_absolute_url}}">{{biz_invest.business}}</a></strong></td>
+                                            <td>
+                                               {{biz_invest.business.pitch}}
+                                            </td>
+                                            <td>
+                                                {% if biz_invest.approved %}<span style="color:green">Approved</span>{% else %}<span style="color:red">Pending Approval</span>{% endif %}
+                                            </td>
+                                        </tr>
+                                        {% empty %}
+                                        <p>You haven't made investments on any start up</p>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div><!-- /.table-responsive -->
+                            </div> <!-- /.panel-body -->
+                        </div>
+                    </div> <!-- #tab-projects -->
+
+                    <div class="tab-pane" id="tab-idea_invest">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h2>My Idea investments </h2>
+                            </div>
+                            <div class="panel-body">
+                                <div class="table-responsive">
+                                    <table class="table m-n">
+                                        <thead>
+                                        <tr>
+                                            <th style="font-size:20px;font-weight:bold">Idea name</th>
+                                            <th style="font-size:20px;font-weight:bold">Description</th>
+                                            <th style="font-size:20px;font-weight:bold">Status</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for idea_invest in investments %}
+                                        <tr>
+                                            <td><strong><a href="{{idea_invest.idea.get_absolute_url}}">{{idea_invest.idea}}</a></strong></td>
+                                            <td>
+                                               {{idea_invest.idea.description}}
+                                            </td>
+                                             <td>
+                                                {% if biz_invest.approved %}<span style="color:green">Approved</span>{% else %}<span style="color:red">Pending Approval</span>{% endif %}
+                                            </td>
+                                        </tr>
+                                        {% empty %}
+                                        <p>You haven't made any investments on any idea</p>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div><!-- /.table-responsive -->
+                            </div> <!-- /.panel-body -->
+                        </div>
+                    </div> <!-- #tab-projects -->
+
+                    <div class="tab-pane" id="tab-biz">
+                        <div class="panel panel-default">
+                            {% if current_user.paid %}
+                            <div class="panel-heading">
+                                <h2>My Business Start ups </h2>
+                            </div>
+                            <div class="panel-body">
+                                <div class="table-responsive">
+                                    <table class="table m-n">
+                                        <thead>
+                                        <tr>
+                                            <th style="font-size:20px;font-weight:bold">Start up name</th>
+                                            <th style="font-size:20px;font-weight:bold">Pitch</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for start in startups %}
+                                        <tr>
+                                            <td><strong><a href="{{start.get_absolute_url}}">{{start.name}}</a></strong></td>
+                                            <td>
+                                               {{start.pitch}}
+                                            </td>
+                                        </tr>
+                                        {% empty %}
+                                        <p>{{user_profile.user}} doesn't have any business start up yet</p>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div><!-- /.table-responsive -->
+                            </div> <!-- /.panel-body -->
+                            {% else %}
+                            <div class="panel-heading">
+                                <h2>Upgrade to PRO</h2>
+                            </div>
+                            <div class="panel-body">
+                                <p>Please upgrade to PRO to see the investors interested in your start ups</p>
+                                <a href="{% url 'portal:plans' %}" class="btn btn-primary">Upgrade</a>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div> <!-- #tab-projects -->
+
+                    <div class="tab-pane" id="tab-idea">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h2>My Ideas</h2>
+                            </div>
+                            <div class="panel-body">
+                                <div class="table-responsive">
+                                    <table class="table m-n">
+                                        <thead>
+                                        <tr>
+                                            <th style="font-size:20px;font-weight:bold">Idea Name</th>
+                                            <th style="font-size:20px;font-weight:bold">Description</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for idea in ideas %}
+                                        <tr>
+                                            <td><strong><a href="{{idea.get_absolute_url}}">{{idea.name}}</a></strong></td>
+                                            <td>
+                                               {{idea.description}}
+                                            </td>
+                                        </tr>
+                                        {% empty %}
+                                        <p>{{user_profile.user}} doesn't have any ideas yet</p>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div><!-- /.table-responsive -->
+                            </div> <!-- /.panel-body -->
+                        </div>
+                    </div> <!-- #tab-projects -->
+
+                    <div class="tab-pane active" id="tab-about">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h2>About</h2>
+                            </div>
+                            <div class="panel-body">
+                                <div class="about-area">
+                                    <h4>Bio</h4>
+                                    <p>{{user_profile.bio}}</p>
+                                </div>
+                                <div class="about-area">
+                                    <h4>Basic Information</h4>
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <tbody>
+                                            <tr>
+                                                <th>Email</th>
+                                                <td>{{user_profile.user.email}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Phone</th>
+                                                <td>{{user_profile.phone_number}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Profession</th>
+                                                <td>{{user_profile.profession}}</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="about-area">
+                                    <h4>Personal Information</h4>
+                                    <div class="table-responsive">
+                                        <table class="table about-table">
+                                            <tbody>
+                                            <tr>
+                                                <th>Full Name</th>
+                                                <td>{{user_profile.user.first_name}} {{user_profile.user.last_name}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>City</th>
+                                                <td>{{user_profile.town}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Country</th>
+                                                <td>{{user_profile.country}}</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--<div class="tab-pane" id="tab-timeline">-->
+                        <!--<div class="panel">-->
+                            <!--<div class="panel-heading">-->
+                                <!--<h2>Timeline</h2>-->
+                            <!--</div>-->
+                            <!--<div class="panel-body">-->
+                                <!--<div class="row">-->
+                                    <!--<div class="col-md-12">-->
+                                        <!--<ul class="timeline">-->
+                                            <!--<li class="timeline-primary">-->
+                                                <!--<div class="timeline-icon"><i-->
+                                                        <!--class="ti ti-pencil"></i></div>-->
+                                                <!--<div class="timeline-body">-->
+                                                    <!--<div class="timeline-header">-->
+                                                        <!--<span class="author">Posted by <a-->
+                                                                <!--href="#">David Tennant</a></span>-->
+                                                        <!--<span class="date">Monday, November 21, 2013</span>-->
+                                                    <!--</div>-->
+                                                    <!--<div class="timeline-content">-->
+                                                        <!--<h4>Consectetur Adipisicing Elit</h4>-->
+                                                        <!--<p>Lorem ipsum dolor sit amet, consectetur-->
+                                                            <!--adipisicing elit. Officia, officiis,-->
+                                                            <!--molestiae, deserunt asperiores-->
+                                                            <!--architecto ut vel repudiandae dolore-->
+                                                            <!--inventore nesciunt necessitatibus-->
+                                                            <!--doloribus ratione facere consectetur-->
+                                                            <!--suscipit!</p>-->
+                                                    <!--</div>-->
+                                                <!--</div>-->
+                                            <!--</li>-->
+                                            <!--<li class="timeline-info">-->
+                                                <!--<div class="timeline-icon"><i-->
+                                                        <!--class="ti ti-heart"></i></div>-->
+                                                <!--<div class="timeline-body">-->
+                                                    <!--<div class="timeline-header">-->
+                                                        <!--<span class="author">Posted by <a-->
+                                                                <!--href="#">David Tennant</a></span>-->
+                                                        <!--<span class="date">Monday, November 21, 2013</span>-->
+                                                    <!--</div>-->
+                                                    <!--<div class="timeline-content">-->
+                                                        <!--<h4>Consectetur Adipisicing Elit</h4>-->
+                                                        <!--<p>Lorem ipsum dolor sit amet, consectetur-->
+                                                            <!--adipisicing elit. Officia, officiis,-->
+                                                            <!--molestiae, deserunt asperiores-->
+                                                            <!--architecto ut vel repudiandae dolore-->
+                                                            <!--inventore nesciunt necessitatibus-->
+                                                            <!--doloribus ratione facere consectetur-->
+                                                            <!--suscipit!</p>-->
+                                                    <!--</div>-->
+                                                <!--</div>-->
+                                            <!--</li>-->
+                                            <!--<li class="timeline-warning">-->
+                                                <!--<div class="timeline-icon"><i-->
+                                                        <!--class="ti ti-camera"></i></div>-->
+                                                <!--<div class="timeline-body">-->
+                                                    <!--<div class="timeline-header">-->
+                                                        <!--<span class="author">Posted by <a-->
+                                                                <!--href="#">David Tennant</a></span>-->
+                                                        <!--<span class="date">Monday, November 21, 2013</span>-->
+                                                    <!--</div>-->
+                                                    <!--<div class="timeline-content">-->
+                                                        <!--<h4>Consectetur Adipisicing Elit</h4>-->
+                                                        <!--<ul class="list-inline">-->
+                                                            <!--<li><img-->
+                                                                    <!--src="http://placehold.it/300&text=Placeholder"-->
+                                                                    <!--alt=""-->
+                                                                    <!--class="pull-left img-thumbnail img-responsive clearfix"-->
+                                                                    <!--width="200"></li>-->
+                                                            <!--<li><img-->
+                                                                    <!--src="http://placehold.it/300&text=Placeholder"-->
+                                                                    <!--alt=""-->
+                                                                    <!--class="pull-left img-thumbnail img-responsive clearfix"-->
+                                                                    <!--width="200"></li>-->
+                                                        <!--</ul>-->
+                                                    <!--</div>-->
+                                                <!--</div>-->
+                                            <!--</li>-->
+                                            <!--<li class="timeline-danger">-->
+                                                <!--<div class="timeline-icon"><i-->
+                                                        <!--class="ti ti-home"></i></div>-->
+                                                <!--<div class="timeline-body">-->
+                                                    <!--<div class="timeline-header">-->
+                                                        <!--<span class="author">Posted by <a-->
+                                                                <!--href="#">David Tennant</a></span>-->
+                                                        <!--<span class="date">Monday, November 21, 2013</span>-->
+                                                    <!--</div>-->
+                                                    <!--<div class="timeline-content">-->
+                                                        <!--<h4>Consectetur Adipisicing Elit</h4>-->
+                                                        <!--<p>Lorem ipsum dolor sit amet, consectetur-->
+                                                            <!--adipisicing elit. Officia, officiis,-->
+                                                            <!--molestiae, deserunt asperiores-->
+                                                            <!--architecto ut vel repudiandae dolore-->
+                                                            <!--inventore nesciunt necessitatibus-->
+                                                            <!--doloribus ratione facere consectetur-->
+                                                            <!--suscipit!</p>-->
+                                                    <!--</div>-->
+                                                <!--</div>-->
+                                            <!--</li>-->
+                                        <!--</ul>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+
+                    <!--<div class="tab-pane" id="tab-photos">-->
+                        <!--<div class="panel">-->
+                            <!--<div class="panel-heading">-->
+                                <!--<h2>Photos</h2>-->
+                            <!--</div>-->
+                            <!--<div class="panel-body profile-photos">-->
+                                <!--<div class="row">-->
+                                    <!--<div class="col-md-3">-->
+                                        <!--<img src="http://placehold.it/300&text=Placeholder" alt=""-->
+                                             <!--class="img-thumbnail img-responsive mb-xl">-->
+                                    <!--</div>-->
+                                    <!--<div class="col-md-3">-->
+                                        <!--<img src="http://placehold.it/300&text=Placeholder" alt=""-->
+                                             <!--class="img-thumbnail img-responsive mb-xl">-->
+                                    <!--</div>-->
+                                    <!--<div class="col-md-3">-->
+                                        <!--<img src="http://placehold.it/300&text=Placeholder" alt=""-->
+                                             <!--class="img-thumbnail img-responsive mb-xl">-->
+                                    <!--</div>-->
+                                    <!--<div class="col-md-3">-->
+                                        <!--<img src="http://placehold.it/300&text=Placeholder" alt=""-->
+                                             <!--class="img-thumbnail img-responsive mb-xl">-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                                <!--<div class="row">-->
+                                    <!--<div class="col-md-3">-->
+                                        <!--<img src="http://placehold.it/300&text=Placeholder" alt=""-->
+                                             <!--class="img-thumbnail img-responsive mb-xl">-->
+                                    <!--</div>-->
+                                    <!--<div class="col-md-3">-->
+                                        <!--<img src="http://placehold.it/300&text=Placeholder" alt=""-->
+                                             <!--class="img-thumbnail img-responsive mb-xl">-->
+                                    <!--</div>-->
+                                    <!--<div class="col-md-3">-->
+                                        <!--<img src="http://placehold.it/300&text=Placeholder" alt=""-->
+                                             <!--class="img-thumbnail img-responsive mb-xl">-->
+                                    <!--</div>-->
+                                    <!--<div class="col-md-3">-->
+                                        <!--<img src="http://placehold.it/300&text=Placeholder" alt=""-->
+                                             <!--class="img-thumbnail img-responsive mb-xl">-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+
+                    <!--<div class="tab-pane" id="tab-edit">-->
+                        <!--<div class="panel">-->
+                            <!--<div class="panel-heading">-->
+                                <!--<h2>Edit Profile</h2>-->
+                            <!--</div>-->
+                            <!--<div class="panel-body">-->
+                                <!--<div class="row">-->
+                                    <!--<div class="col-md-10" style="margin:10px">-->
+                                        <!--<form class="form-horizontal tabular-form" enctype="multipart/form-data" method="post">-->
+                                            <!--{% csrf_token %}-->
+                                            <!--{{user_form|crispy}}-->
+                                            <!--{{profile_form|crispy}}-->
+                                            <!--<div class="panel-footer">-->
+                                                <!--<div class="row">-->
+                                                    <!--<div class="col-sm-8 col-sm-10">-->
+                                                        <!--<input type="submit" class="btn-primary btn" value="Save">-->
+                                                    <!--</div>-->
+                                                <!--</div>-->
+                                            <!--</div>-->
+
+                                        <!--</form>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                   <!--<div class="tab-pane" id="tab-add">-->
+                        <!--<div class="panel">-->
+                            <!--<div class="panel-heading">-->
+                                <!--<h2>Add a new Idea</h2>-->
+                            <!--</div>-->
+                            <!--{% if messages %}-->
+                            <!--{% for message in messages %}-->
+                            <!--{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}-->
+                            <!--<div class="alert alert-danger">-->
+                                <!--<strong>{{ message|escape }}</strong>-->
+                            <!--</div>-->
+                            <!--{% else %}-->
+                            <!--<div class="alert alert-success">-->
+                                <!--<strong>{{ message|escape }}</strong>-->
+                            <!--</div>-->
+                            <!--{% endif %}-->
+                            <!--{% endfor %}-->
+                            <!--{% endif %}-->
+                            <!--<div class="panel-body">-->
+                                <!--<div class="row">-->
+                                    <!--<div class="col-md-10" style="margin:10px">-->
+                                        <!--<form class="form-horizontal tabular-form" enctype="multipart/form-data" method="post">-->
+                                            <!--{% csrf_token %}-->
+                                            <!--{{idea_form2|crispy}}-->
+                                            <!--<div class="panel-footer">-->
+                                                <!--<div class="row">-->
+                                                    <!--<div class="col-sm-8 col-sm-10">-->
+                                                        <!--<input type="submit" class="btn-primary btn" value="Save">-->
+                                                    <!--</div>-->
+                                                <!--</div>-->
+                                            <!--</div>-->
+
+                                        <!--</form>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+
+                     <!--<div class="tab-pane" id="tab-add2">-->
+                        <!--<div class="panel">-->
+                            <!--<div class="panel-heading">-->
+                                <!--<h2>Add a new Start up</h2>-->
+                            <!--</div>-->
+                            <!--{% if messages %}-->
+                            <!--{% for message in messages %}-->
+                            <!--{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}-->
+                            <!--<div class="alert alert-danger">-->
+                                <!--<strong>{{ message|escape }}</strong>-->
+                            <!--</div>-->
+                            <!--{% else %}-->
+                            <!--<div class="alert alert-success">-->
+                                <!--<strong>{{ message|escape }}</strong>-->
+                            <!--</div>-->
+                            <!--{% endif %}-->
+                            <!--{% endfor %}-->
+                            <!--{% endif %}-->
+                            <!--<div class="panel-body">-->
+                                <!--<div class="row">-->
+                                    <!--<div class="col-md-10" style="margin:10px">-->
+                                        <!--<form class="form-horizontal tabular-form" enctype="multipart/form-data" method="post">-->
+                                            <!--{% csrf_token %}-->
+                                            <!--{{business_form|crispy}}-->
+                                            <!--<div class="panel-footer">-->
+                                                <!--<div class="row">-->
+                                                    <!--<div class="col-sm-8 col-sm-10">-->
+                                                        <!--<input type="submit" class="btn-primary btn" value="Save">-->
+                                                    <!--</div>-->
+                                                <!--</div>-->
+                                            <!--</div>-->
+
+                                        <!--</form>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+
+                </div><!-- .tab-content -->
+            </div><!-- col-sm-8 -->
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
+

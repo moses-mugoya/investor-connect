@@ -1,0 +1,39 @@
+{% extends 'portal/base.html' %}
+
+{% block title %}Service Detail{% endblock %}
+
+{% block body %}
+<ol class="breadcrumb">
+
+  <li class=""><a href="{% url 'portal:home' %}">Home</a></li>
+  <li class="active"><a>Service Detail</a></li>
+
+</ol>
+<section id="team" class="pb-5">
+    <div class="container">
+        <!--<h5 class="section-title h1">All Ideas</h5>-->
+        <div class="row">
+            {% if messages %}
+            {% for message in messages %}
+            {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+            <div class="alert alert-danger">
+                <strong>{{ message|escape }}</strong>
+            </div>
+            {% else %}
+            <div class="alert alert-success">
+                <strong>{{ message|escape }}</strong>
+            </div>
+            {% endif %}
+            {% endfor %}
+            {% endif %}
+            <p>Please confirm that you want to request for {{service.name}}</p>
+            <br>
+            <form method="post" action=".">
+                {%csrf_token%}
+                <input type="submit" value="confirm" class="btn btn-primary">
+            </form>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

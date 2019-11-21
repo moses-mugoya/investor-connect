@@ -1,0 +1,71 @@
+{% extends 'portal/base.html' %}
+
+{% block title %} Centinum Ventures {% endblock %}
+
+{% block body %}
+{% load static %}
+<ol class="breadcrumb">
+
+  <li class=""><a href="{% url 'portal:home' %}">Home</a></li>
+  <li class="active"><a href="{% url 'portal:centinum' %}">Centinum Ventures</a></li>
+
+</ol>
+<section id="team" class="pb-5">
+    <div class="container">
+        <!--<h5 class="section-title h1">Centinum Ventures</h5>-->
+        <div class="row">
+            <h1>Ventures</h1>
+          {% for cent in centinum %}
+            <!-- Team member -->
+            <div class="col-xs-12 col-sm-6 col-md-4">
+              <div class="frontside">
+                <div class="card">
+                  <div class="card-body text-center">
+                    <p><img class=" img-fluid"
+                            src="{% if idea.user.profiles.profile_image %}{{idea.user.profiles.profile_image.url}}{%else%}{% static 'portal/assets/img/profile.png' %}{% endif %}"
+                            alt="card image"
+                            style="margin-top:15px"
+                    ></p>
+                    <h4 class="card-title">{{cent.name}}</h4>
+                      <!--<h5>Looking for <span style="color:#222548">{{idea.interest}}</span></h5>-->
+                     <a href="{{cent.get_absolute_url}}" class="btn btn-success" style="border-radius:20px"> 0 Likes</a><br><br>
+                      <a href="{{cent.get_absolute_url}}" class="btn btn-primary" style="border-radius:20px"> View</a>
+                    <!--<p class="card-text">This is basic card with image on top, title, description and button.</p>-->
+                    <!--<a href="#" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i></a>-->
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% empty %}
+            <p>There are no Centinum Ventures at the moment</p>
+          {% endfor %}
+            <!-- ./Team member -->
+          <h1>Services</h1>
+          {% for service in services %}
+            <div class="col-xs-12 col-sm-6 col-md-4">
+              <div class="frontside">
+                <div class="card">
+                  <div class="card-body text-center">
+                    <p><img class=" img-fluid"
+                            src="{% static 'portal/assets/img/profile.png' %}"
+                            alt="card image"
+                            style="margin-top:15px"
+                    ></p>
+                    <h4 class="card-title">{{service.name}}</h4>
+                      <!--<h5>Looking for <span style="color:#222548">{{idea.interest}}</span></h5>-->
+                    <!--<p class="card-text">This is basic card with image on top, title, description and button.</p>-->
+                    <a href="{% url 'portal:service-detail' service.id %}" class="btn btn-primary btn-sm"> Request this service</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          {% empty %}
+            <p>There are no centinum services at the moment</p>
+          {% endfor %}
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+

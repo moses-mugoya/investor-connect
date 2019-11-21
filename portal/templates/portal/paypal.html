@@ -1,0 +1,35 @@
+{% extends 'portal/base.html'  %}
+
+{% block title %}PayPal Payment{% endblock %}
+
+{% block body %}
+{% load static %}
+{% load crispy_forms_tags %}
+<ol class="breadcrumb">
+
+    <li><a href="{% url 'portal:home_biz' %}">Home</a></li>
+    <li class="active"><a href="{% url 'portal:process' %}">PayPal Payments</a></li>
+
+</ol>
+<div class="container-fluid">
+
+    <div data-widget-group="group1">
+        <div class="row">
+            <div class="tab-pane" id="join">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2>PayPal</h2>
+                    </div>
+                    <div class="panel-body">
+                        <p>Pay with PayPal</p>
+                        {{form.render}}
+                    </div> <!-- /.panel-body -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
+

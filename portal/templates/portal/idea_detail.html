@@ -1,0 +1,432 @@
+{% extends 'portal/base.html'  %}
+
+{% block title %} Idea Detail {% endblock %}
+
+{% block body %}
+{% load static %}
+{% load crispy_forms_tags %}
+<ol class="breadcrumb">
+
+    <li><a href="{% url 'portal:home' %}">Home</a></li>
+    <li class="active"><a href="{{idea.get_absolute_url}}">Idea Detail</a></li>
+
+</ol>
+<div class="container-fluid">
+
+    <div data-widget-group="group1">
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="panel panel-profile">
+                    <div class="panel-body">
+                        <img src="{% if idea.user.profiles.profile_image %}{{idea.user.profiles.profile_image.url}}{%else%}{% static 'portal/assets/img/profile.png' %}{% endif %}" class="img-circle">
+                        <div class="name">{{idea.user.first_name}} {{idea.user.last_name}}</div>
+                        <div class="info">Owner</div><br>
+                        {% with total_likes=idea.users_like.count users_like=idea.users_like.all %}
+                        <span class="btn" style="border-radius:20px; background-color:white;color: grey;border-color:grey">
+                            <span class="like_count">{{total_likes}}</span>
+                            like{{total_likes|pluralize}}
+                        </span>
+                        <a href="#" data-id="{{ idea.id }}" data-action="{% if request.user in users_like %}un{% endif %}like" class="like btn btn-primary" style="border-radius:20px">
+                            {% if request.user not in users_like %}
+                            Like
+                            {% else %}
+                            Unlike
+                            {% endif %}
+                        </a>
+                        {% endwith %}
+                        <!--<ul class="list-inline text-center">-->
+                            <!--<li><a href="#" class="profile-facebook-icon"><i-->
+                                    <!--class="ti ti-facebook"></i></a></li>-->
+                            <!--<li><a href="#" class="profile-twitter-icon"><i-->
+                                    <!--class="ti ti-twitter"></i></a></li>-->
+                            <!--<li><a href="#" class="profile-dribbble-icon"><i-->
+                                    <!--class="ti ti-dribbble"></i></a></li>-->
+                        <!--</ul>-->
+                    </div>
+                </div><!-- panel -->
+                <div class="list-group list-group-alternate mb-n nav nav-tabs">
+                    <a href="#tab-about" role="tab" data-toggle="tab"
+                       class="list-group-item active"><i
+                            class="ti ti-stats-up"></i>About</a>
+                    <a href="#tab-stat_invest" role="tab" data-toggle="tab" class="list-group-item"><i
+                            class="ti ti-user"></i>Investors</a>
+                    <a href="#tab-members" role="tab" data-toggle="tab" class="list-group-item"><i
+                            class="ti ti-user"></i>Members</a>
+                    {% if request.user.is_investor and request.user not in all_investors %}
+                    <a href="#invest" role="tab" data-toggle="tab" class="list-group-item" style="color:#5b5be3"><i
+                            class="ti ti-link"></i>Invest Now</a>
+                    {% elif request.user.is_innovator and idea.user.username == request.user.username %}
+                    <a href="#tab-edit" role="tab" data-toggle="tab" class="list-group-item"><i
+                            class="ti ti-pencil"></i>Edit Idea</a>
+                    {% endif %}
+                    {% if request.user not in team_members and request.user.is_entrepreneur %}
+                    <a href="#join" role="tab" data-toggle="tab" class="list-group-item"><i
+                            class="ti ti-link"></i>Join Team</a>
+                    {% endif %}
+                </div>
+            </div><!-- col-sm-3 -->
+            <div class="col-sm-9">
+                <div class="tab-content">
+                    <div class="tab-pane" id="tab-stat_invest">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h2>Investors</h2>
+                            </div>
+                            <div class="panel-body">
+                                <div class="table-responsive">
+                                    <table class="table m-n">
+                                        <thead>
+                                        {% if investor != None %}
+                                        <tr>
+                                            <th style="font-size:20px;font-weight:bold">Full Name</th>
+                                        </tr>
+                                        {% endif %}
+                                        </thead>
+                                        <tbody>
+                                        {% for investor in investors %}
+                                        <tr>
+                                            <li class="media notification-message">
+                                                <a href="{{team.member.profiles.get_absolute_url}}">
+                                                    <div class="media-left">
+                                                        <img class="img-circle avatar"
+                                                             src="{% if investor.investor.profiles.profile_image %}{{investor.investor.profiles.profile_image.url}}{%else%}{% static 'portal/assets/img/profile.png' %}{% endif %}"
+                                                             alt=""/>&nbsp;&nbsp;<span>{{investor.investor}}</span>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                        </tr>
+                                        {% empty %}
+                                        <p>This idea has no investors yet</p>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div><!-- /.table-responsive -->
+                            </div> <!-- /.panel-body -->
+                        </div>
+                    </div> <!-- #tab-projects -->
+
+                    <div class="tab-pane" id="tab-members">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h2>Members</h2><br>
+                                {% if request.user == idea.user %}
+                                <a href="{% url 'portal:idea_search' idea.id %}"> Add Member</a>
+                                {% endif %}
+                            </div>
+                            <div class="panel-body">
+                                <div class="table-responsive">
+                                    <table class="table m-n">
+                                        <thead>
+                                        {% if idea_teams == None %}
+                                        <tr>
+                                            <th style="font-size:20px;font-weight:bold">Full Name</th>
+                                        </tr>
+                                        {% endif %}
+                                        </thead>
+                                        <tbody>
+                                        {% for team in idea_teams %}
+                                        <tr>
+                                             <li class="media notification-message">
+                                                <a href="{{team.member.profiles.get_absolute_url}}">
+                                                    <div class="media-left">
+                                                        <img class="img-circle avatar"
+                                                             src="{% if team.member.profiles.profile_image %}{{team.member.profiles.profile_image.url}}{%else%}{% static 'portal/assets/img/profile.png' %}{% endif %}"
+                                                             alt=""/>&nbsp;&nbsp;<span>{{team.member}}</span>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                        </tr>
+                                        {% empty %}
+                                        <p>This idea has no members yet</p>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div><!-- /.table-responsive -->
+                            </div> <!-- /.panel-body -->
+                        </div>
+                    </div> <!-- #tab-projects -->
+
+                    <div class="tab-pane" id="invest">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h2>Confirm Investment</h2>
+                            </div>
+                            <div class="panel-body">
+                                <p>Please confirm that you want to invest in this idea.</p>
+                                <a href=" {{ idea.get_absolute_url }}" class="btn btn-primary">Go Back</a>
+                                <a href="{% url 'portal:idea_invest' idea.id %}" class="btn btn-success">Confirm</a>
+                            </div> <!-- /.panel-body -->
+                        </div>
+                    </div> <!-- #tab-projects -->
+                  <div class="tab-pane" id="join">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h2>Confirm that you want to join</h2>
+                            </div>
+                            <div class="panel-body">
+                                <p>Please confirm that you want to join this idea.</p>
+                                <a href=" {{ idea.get_absolute_url }}" class="btn btn-primary">Go Back</a>
+                                <a href="{% url 'portal:join_idea' idea.id %}" class="btn btn-success">Confirm</a>
+                            </div> <!-- /.panel-body -->
+                        </div>
+                    </div>
+
+                    <div class="tab-pane" id="tab-idea">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h2>My Ideas</h2>
+                            </div>
+                            <div class="panel-body">
+                                <div class="table-responsive">
+                                    <table class="table m-n">
+                                        <thead>
+                                        <tr>
+                                            <th style="font-size:20px;font-weight:bold">Idea Name</th>
+                                            <th style="font-size:20px;font-weight:bold">Description</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for ide in user_idea %}
+                                        <tr>
+                                            <td><strong><a href="#">{{ide.name}}</a></strong></td>
+                                            <td>
+                                               {{ide.description}}
+                                            </td>
+                                        </tr>
+                                        {% empty %}
+                                        <p>You haven't added any ideas yet</p>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div><!-- /.table-responsive -->
+                            </div> <!-- /.panel-body -->
+                        </div>
+                    </div> <!-- #tab-projects -->
+
+                    <div class="tab-pane active" id="tab-about">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h2>About</h2>
+                            </div>
+                            <div class="panel-body">
+                                <div class="about-area">
+                                    <h4>About {{idea.name}}</h4>
+                                    <p>{{idea.description}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--<div class="tab-pane" id="tab-timeline">-->
+                        <!--<div class="panel">-->
+                            <!--<div class="panel-heading">-->
+                                <!--<h2>Timeline</h2>-->
+                            <!--</div>-->
+                            <!--<div class="panel-body">-->
+                                <!--<div class="row">-->
+                                    <!--<div class="col-md-12">-->
+                                        <!--<ul class="timeline">-->
+                                            <!--<li class="timeline-primary">-->
+                                                <!--<div class="timeline-icon"><i-->
+                                                        <!--class="ti ti-pencil"></i></div>-->
+                                                <!--<div class="timeline-body">-->
+                                                    <!--<div class="timeline-header">-->
+                                                        <!--<span class="author">Posted by <a-->
+                                                                <!--href="#">David Tennant</a></span>-->
+                                                        <!--<span class="date">Monday, November 21, 2013</span>-->
+                                                    <!--</div>-->
+                                                    <!--<div class="timeline-content">-->
+                                                        <!--<h4>Consectetur Adipisicing Elit</h4>-->
+                                                        <!--<p>Lorem ipsum dolor sit amet, consectetur-->
+                                                            <!--adipisicing elit. Officia, officiis,-->
+                                                            <!--molestiae, deserunt asperiores-->
+                                                            <!--architecto ut vel repudiandae dolore-->
+                                                            <!--inventore nesciunt necessitatibus-->
+                                                            <!--doloribus ratione facere consectetur-->
+                                                            <!--suscipit!</p>-->
+                                                    <!--</div>-->
+                                                <!--</div>-->
+                                            <!--</li>-->
+                                            <!--<li class="timeline-info">-->
+                                                <!--<div class="timeline-icon"><i-->
+                                                        <!--class="ti ti-heart"></i></div>-->
+                                                <!--<div class="timeline-body">-->
+                                                    <!--<div class="timeline-header">-->
+                                                        <!--<span class="author">Posted by <a-->
+                                                                <!--href="#">David Tennant</a></span>-->
+                                                        <!--<span class="date">Monday, November 21, 2013</span>-->
+                                                    <!--</div>-->
+                                                    <!--<div class="timeline-content">-->
+                                                        <!--<h4>Consectetur Adipisicing Elit</h4>-->
+                                                        <!--<p>Lorem ipsum dolor sit amet, consectetur-->
+                                                            <!--adipisicing elit. Officia, officiis,-->
+                                                            <!--molestiae, deserunt asperiores-->
+                                                            <!--architecto ut vel repudiandae dolore-->
+                                                            <!--inventore nesciunt necessitatibus-->
+                                                            <!--doloribus ratione facere consectetur-->
+                                                            <!--suscipit!</p>-->
+                                                    <!--</div>-->
+                                                <!--</div>-->
+                                            <!--</li>-->
+                                            <!--<li class="timeline-warning">-->
+                                                <!--<div class="timeline-icon"><i-->
+                                                        <!--class="ti ti-camera"></i></div>-->
+                                                <!--<div class="timeline-body">-->
+                                                    <!--<div class="timeline-header">-->
+                                                        <!--<span class="author">Posted by <a-->
+                                                                <!--href="#">David Tennant</a></span>-->
+                                                        <!--<span class="date">Monday, November 21, 2013</span>-->
+                                                    <!--</div>-->
+                                                    <!--<div class="timeline-content">-->
+                                                        <!--<h4>Consectetur Adipisicing Elit</h4>-->
+                                                        <!--<ul class="list-inline">-->
+                                                            <!--<li><img-->
+                                                                    <!--src="http://placehold.it/300&text=Placeholder"-->
+                                                                    <!--alt=""-->
+                                                                    <!--class="pull-left img-thumbnail img-responsive clearfix"-->
+                                                                    <!--width="200"></li>-->
+                                                            <!--<li><img-->
+                                                                    <!--src="http://placehold.it/300&text=Placeholder"-->
+                                                                    <!--alt=""-->
+                                                                    <!--class="pull-left img-thumbnail img-responsive clearfix"-->
+                                                                    <!--width="200"></li>-->
+                                                        <!--</ul>-->
+                                                    <!--</div>-->
+                                                <!--</div>-->
+                                            <!--</li>-->
+                                            <!--<li class="timeline-danger">-->
+                                                <!--<div class="timeline-icon"><i-->
+                                                        <!--class="ti ti-home"></i></div>-->
+                                                <!--<div class="timeline-body">-->
+                                                    <!--<div class="timeline-header">-->
+                                                        <!--<span class="author">Posted by <a-->
+                                                                <!--href="#">David Tennant</a></span>-->
+                                                        <!--<span class="date">Monday, November 21, 2013</span>-->
+                                                    <!--</div>-->
+                                                    <!--<div class="timeline-content">-->
+                                                        <!--<h4>Consectetur Adipisicing Elit</h4>-->
+                                                        <!--<p>Lorem ipsum dolor sit amet, consectetur-->
+                                                            <!--adipisicing elit. Officia, officiis,-->
+                                                            <!--molestiae, deserunt asperiores-->
+                                                            <!--architecto ut vel repudiandae dolore-->
+                                                            <!--inventore nesciunt necessitatibus-->
+                                                            <!--doloribus ratione facere consectetur-->
+                                                            <!--suscipit!</p>-->
+                                                    <!--</div>-->
+                                                <!--</div>-->
+                                            <!--</li>-->
+                                        <!--</ul>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+
+                    <!--<div class="tab-pane" id="tab-photos">-->
+                        <!--<div class="panel">-->
+                            <!--<div class="panel-heading">-->
+                                <!--<h2>Photos</h2>-->
+                            <!--</div>-->
+                            <!--<div class="panel-body profile-photos">-->
+                                <!--<div class="row">-->
+                                    <!--<div class="col-md-3">-->
+                                        <!--<img src="http://placehold.it/300&text=Placeholder" alt=""-->
+                                             <!--class="img-thumbnail img-responsive mb-xl">-->
+                                    <!--</div>-->
+                                    <!--<div class="col-md-3">-->
+                                        <!--<img src="http://placehold.it/300&text=Placeholder" alt=""-->
+                                             <!--class="img-thumbnail img-responsive mb-xl">-->
+                                    <!--</div>-->
+                                    <!--<div class="col-md-3">-->
+                                        <!--<img src="http://placehold.it/300&text=Placeholder" alt=""-->
+                                             <!--class="img-thumbnail img-responsive mb-xl">-->
+                                    <!--</div>-->
+                                    <!--<div class="col-md-3">-->
+                                        <!--<img src="http://placehold.it/300&text=Placeholder" alt=""-->
+                                             <!--class="img-thumbnail img-responsive mb-xl">-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                                <!--<div class="row">-->
+                                    <!--<div class="col-md-3">-->
+                                        <!--<img src="http://placehold.it/300&text=Placeholder" alt=""-->
+                                             <!--class="img-thumbnail img-responsive mb-xl">-->
+                                    <!--</div>-->
+                                    <!--<div class="col-md-3">-->
+                                        <!--<img src="http://placehold.it/300&text=Placeholder" alt=""-->
+                                             <!--class="img-thumbnail img-responsive mb-xl">-->
+                                    <!--</div>-->
+                                    <!--<div class="col-md-3">-->
+                                        <!--<img src="http://placehold.it/300&text=Placeholder" alt=""-->
+                                             <!--class="img-thumbnail img-responsive mb-xl">-->
+                                    <!--</div>-->
+                                    <!--<div class="col-md-3">-->
+                                        <!--<img src="http://placehold.it/300&text=Placeholder" alt=""-->
+                                             <!--class="img-thumbnail img-responsive mb-xl">-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+
+                    <div class="tab-pane" id="tab-edit">
+                        <div class="panel">
+                            <div class="panel-heading">
+                                <h2>Edit Idea</h2>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-10" style="margin:10px">
+                                        <form class="form-horizontal tabular-form" enctype="multipart/form-data" method="post">
+                                            {% csrf_token %}
+                                            {{idea_form|crispy}}
+                                            <div class="panel-footer">
+                                                <div class="row">
+                                                    <div class="col-sm-8 col-sm-10">
+                                                        <input type="submit" class="btn-primary btn" value="Save">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div><!-- .tab-content -->
+            </div><!-- col-sm-8 -->
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block domready %}
+    $('a.like').click(function(e){
+    e.preventDefault();
+    $.post('{% url "portal:idea_like" %}',
+    {
+    id: $(this).data('id'),
+    action: $(this).data('action')
+    },
+    function(data){if (data['status'] == 'ok')
+    {
+    var previous_action = $('a.like').data('action');
+    // toggle data-action
+    $('a.like').data('action', previous_action == 'like' ?
+    'unlike' : 'like');
+    // toggle link text
+    $('a.like').text(previous_action == 'like' ? 'Unlike' :
+    'Like');
+    // update total likes
+    var previous_likes = parseInt($('span.btn .like_count').text());
+    $('span.btn .like_count').text(previous_action == 'like' ?
+    previous_likes + 1 : previous_likes - 1);
+    }
+    }
+    );
+    });
+{% endblock %}
+
