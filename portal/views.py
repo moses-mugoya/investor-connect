@@ -431,17 +431,20 @@ def privacy(request):
 
 def plans(request):
     checker = False
+    created_date = None
+    due_date = None
     current_user_subscription = UserSubscriptions.objects.get(user=request.user)
     sub_id = Subscriptions.objects.get(user_subscription=current_user_subscription)
     current_user_subscription = current_user_subscription.plan
-    sub_id = sub_id.stripe_subscription_id
-    current_plan = stripe.Subscription.retrieve(sub_id)
-    created_date = datetime.fromtimestamp(current_plan.created)
-    due_date = datetime.fromtimestamp(current_plan.current_period_end)
+    if sub_id.stripe_subscription_id is not None:
+        sub_id = sub_id.stripe_subscription_id
+        current_plan = stripe.Subscription.retrieve(sub_id)
+        created_date = datetime.fromtimestamp(current_plan.created)
+        due_date = datetime.fromtimestamp(current_plan.current_period_end)
 
-    dif = due_date - created_date
-    if str(dif) == '7 days, 0:00:00':
-        checker = True
+        dif = due_date - created_date
+        if str(dif) == '7 days, 0:00:00':
+            checker = True
     plan_cats = PlanCategories.objects.all()
     return render(request, 'portal/plans.html', {'current_user_subscription': current_user_subscription,
                                                  'plan_cats': plan_cats,
@@ -501,6 +504,9 @@ class HomePageView(TemplateView):
 def charge(request, id):
     current_user_subscription = UserSubscriptions.objects.get(user=request.user)
     customer_id = current_user_subscription.stripe_customer_id
+    current_user_subscription_id = Subscriptions.objects.get(user_subscription=current_user_subscription)
+    if current_user_subscription_id.stripe_subscription_id is not None:
+        current_user_subscription_id = current_user_subscription_id.stripe_subscription_id
     plan = Plans.objects.get(id=id)
     plan_id = plan.stripe_plan_id
     if request.method == 'POST':
@@ -522,6 +528,8 @@ def charge(request, id):
                 trial_period_days=7
             )
             if subscription.status != "incomplete":
+                if current_user_subscription_id is not None:
+                    stripe.Subscription.delete(current_user_subscription_id)
                 current_user_subscription.plan = plan
                 current_user_subscription.save()
                 current_subscription, created = Subscriptions.objects.get_or_create(user_subscription=current_user_subscription)
@@ -530,11 +538,34 @@ def charge(request, id):
                 current_subscription.save()
                 return render(request, 'portal/success_sub.html')
             else:
-                print("we printed here")
                 return redirect('portal:fail')
 
         except:
             return redirect('portal:fail')
+
+
+def cancel_subscription(request):
+    current_user_subscription = UserSubscriptions.objects.get(user=request.user)
+    customer_id = current_user_subscription.stripe_customer_id
+    current_user_sub_id = Subscriptions.objects.get(user_subscription=current_user_subscription)
+    current_user_sub_id = current_user_sub_id.stripe_subscription_id
+    stripe.Subscription.delete(current_user_sub_id)
+    plan = Plans.objects.get(name='Free')
+    subscription = stripe.Subscription.create(
+        customer=customer_id,
+        items=[
+            {"plan": "plan_GAmCBtTCVEYk1T"},
+        ],
+    )
+
+    current_user_subscription.plan = plan
+    current_user_subscription.save()
+    current_subscription, created = Subscriptions.objects.get_or_create(user_subscription=current_user_subscription)
+    current_subscription.stripe_subscription_id = subscription.id
+    current_subscription.active = True
+    current_subscription.save()
+    messages.success(request, "Subscription cancelled successfully. You now have the default free plan")
+    return redirect('portal:plans')
 
 
 @csrf_exempt
@@ -731,9 +762,14 @@ def service_detail(request, id):
             new_form.service_name = service
             new_form.save()
             messages.success(request, "Request sent successful")
+            return redirect('portal:request_sent')
         else:
             messages.error(request, "Request Not successful")
     return render(request, 'portal/service_detail.html', {'service': service})
+
+
+def request_sent(request):
+    return render(request, 'portal/request_sent.html')
 
 
 def service_provider_requests(request, id):

@@ -274,6 +274,22 @@ def profiles_list(request):
     return render(request, 'account/profile_list.html', {'user_profiles': user_profiles})
 
 
+def profile_list_investors(request):
+    user_profiles = Profile.objects.filter(user__is_verified=True, user__is_investor=True).exclude(user=request.user)
+    print(user_profiles)
+    return render(request, 'account/investors.html', {'user_profiles': user_profiles})
+
+
+def profile_list_enterps(request):
+    user_profiles = Profile.objects.filter(user__is_verified=True, user__is_entrepreneur=True).exclude(user=request.user)
+    return render(request, 'account/entreps.html', {'user_profiles': user_profiles})
+
+
+def profile_list_innovators(request):
+    user_profiles = Profile.objects.filter(user__is_verified=True, user__is_innovator=True).exclude(user=request.user)
+    return render(request, 'account/innovators.html', {'user_profiles': user_profiles})
+
+
 def profile_detail(request, id):
     current_user = get_object_or_404(Profile, user=request.user)
     user_profile = get_object_or_404(Profile, id=id)

@@ -24,7 +24,6 @@ urlpatterns = [
     re_path(r'^user/account/', include('account.urls', namespace='account')),
     re_path(r'^account/', include('django.contrib.auth.urls')),
     re_path(r'^paypal/', include('paypal.standard.ipn.urls')),
-    re_path("stripe/", include("djstripe.urls", namespace="djstripe")),
     re_path('djrichtextfield/', include('djrichtextfield.urls')),
     re_path(r'^', include('portal.urls', namespace='portal')),
 ]

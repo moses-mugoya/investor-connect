@@ -52,8 +52,6 @@ INSTALLED_APPS = [
     'paypal.standard.ipn',
     'django.contrib.postgres',
     'djrichtextfield',
-    'djstripe',
-    'djpaypal',
     'Paypal',
     'Stripe'
 ]

@@ -14,7 +14,7 @@
     <div class="container">
         <!--<h5 class="section-title h1">Centinum Ventures</h5>-->
         <div class="row">
-            <h1>Ventures</h1>
+            <h3 style="margin-left: 20px">Ventures</h3>
           {% for cent in centinum %}
             <!-- Team member -->
             <div class="col-xs-12 col-sm-6 col-md-4">
@@ -37,17 +37,17 @@
               </div>
             </div>
             {% empty %}
-            <p>There are no Centinum Ventures at the moment</p>
+            <p style="margin-left: 20px">There are no Centinum Ventures at the moment</p>
           {% endfor %}
             <!-- ./Team member -->
-          <h1>Services</h1>
+          <h3 style="margin-left: 20px">Services</h3>
           {% for service in services %}
-            <div class="col-xs-12 col-sm-6 col-md-4">
+            <div class="col-xs-12 col-sm-6 col-md-3">
               <div class="frontside">
                 <div class="card">
                   <div class="card-body text-center">
                     <p><img class=" img-fluid"
-                            src="{% static 'portal/assets/img/profile.png' %}"
+                            src="{% static 'portal/assets/img/rate.png' %}"
                             alt="card image"
                             style="margin-top:15px"
                     ></p>
@@ -61,7 +61,7 @@
             </div>
 
           {% empty %}
-            <p>There are no centinum services at the moment</p>
+            <p style="margin-left: 20px">There are no centinum services at the moment</p>
           {% endfor %}
         </div>
     </div>

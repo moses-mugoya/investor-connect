@@ -1,0 +1,33 @@
+{% extends 'portal/base.html'  %}
+
+{% block title %}Request Sent Successfully{% endblock %}
+
+{% block body %}
+{% load static %}
+{% load crispy_forms_tags %}
+<ol class="breadcrumb">
+
+    <li><a href="{% url 'portal:home_biz' %}">Home</a></li>
+    <li class="active"><a>Request Sent</a></li>
+
+</ol>
+<div class="container-fluid">
+
+    <div data-widget-group="group1">
+        <div class="row">
+            <div class="tab-pane" id="join">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2>Request Sent Successful</h2>
+                    </div>
+                    <div class="panel-body">
+                        <p style="color:green">Request sent successfully.</p>
+                    </div> <!-- /.panel-body -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

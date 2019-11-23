@@ -118,6 +118,14 @@ def post_save_user_subscription(sender, instance, created, *args, **kwargs):
             user_subscription.stripe_customer_id = new_customer_id['id']
             user_subscription.plan = Plans.objects.get(name='Free')
             user_subscription.save()
+            subscription = stripe.Subscription.create(
+                customer=new_customer_id,
+                items=[
+                    {"plan": "plan_GAmCBtTCVEYk1T"},
+                ],
+            )
+            Subscriptions.objects.create(user_subscription=user_subscription, stripe_subscription_id=subscription.id,
+                                         active=True)
 
 
 post_save.connect(post_save_user_subscription, User)

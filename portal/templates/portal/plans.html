@@ -12,121 +12,159 @@
 
 </ol>
 <div class="container-fluid">
-
+    {% if messages %}
+    {% for message in messages %}
+    {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+    <div class="alert alert-danger">
+        <strong>{{ message|escape }}</strong>
+    </div>
+    {% else %}
+    <div class="alert alert-success">
+        <strong>{{ message|escape }}</strong>
+    </div>
+    {% endif %}
+    {% endfor %}
+    {% endif %}
     <div data-widget-group="group1">
         <div class="row">
             <p style="margin-left: 20px; color:#0d5773;">Current Subscription: <span
                     style="font-weight:bold;color:#17ae0e">{{current_user_subscription}}</span>
+                {% if created_date != None %}
                 since <span style="color:#17ae0e">{{created_date}}</span>
+                {% endif %}
             </p>
+            {% if created_date != None %}
             {% if checker %}
-            <p style="margin-left: 20px; font-style:italic">You are on a <span style="font-weight:bold; color:black">FREE TRIAL</span>. Initial Payment due <span style="color:#17ae0e">{{due_date}}</span></p>
+            <p style="margin-left: 20px;">You are on a <span style="font-weight:bold; color:black">FREE TRIAL</span>.
+                Initial Payment due <span style="color:#17ae0e">{{due_date}}</span></p>
             {% else %}
-            <p style="margin-left: 20px;font-style:italic">Next Payment due <span style="color:#17ae0e">{{due_date}}</span></p>
+            <p style="margin-left: 20px">Next Payment due <span style="color:#17ae0e">{{due_date}}</span></p>
             {% endif %}
-            {% for plan in plan_cats %}
-            <div class="card col-md-3">
-                {% if plan.name == 'Free'%}
+            {% endif %}
+            {% if current_user_subscription.name != 'Free' %}
+            <p style="margin-left: 20px"><a data-toggle="modal" data-target="#myModal" class="btn btn-danger">Cancel Subscription</a></p>
+            {% endif %}
+            <div class="modal fade" id="myModal" role="dialog">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Cancel Subscription</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>Are you sure you  want to cancel this subscription?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <a href="{% url 'portal:cancel-subscription' %}" class="btn btn-danger">Yes</a>
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% for plan in plan_cats %}
+        <div class="card col-md-3">
+            {% if plan.name == 'Free'%}
+            <div class="card-body" style="text-align:center; background-color:#0d5773">
+                <h5 class="card-title" style="font-size:20px;color:white">{{plan.name}}</h5>
+                <h3 style="color:white">${{plan.default_price_per_month}}/month</h3>
+            </div>
+            {% elif plan.name == 'Startup' %}
+            <a href="{% url 'portal:plan_startup' %}">
                 <div class="card-body" style="text-align:center; background-color:#0d5773">
                     <h5 class="card-title" style="font-size:20px;color:white">{{plan.name}}</h5>
                     <h3 style="color:white">${{plan.default_price_per_month}}/month</h3>
                 </div>
-                {% elif plan.name == 'Startup' %}
-                <a href="{% url 'portal:plan_startup' %}">
-                    <div class="card-body" style="text-align:center; background-color:#0d5773">
-                        <h5 class="card-title" style="font-size:20px;color:white">{{plan.name}}</h5>
-                        <h3 style="color:white">${{plan.default_price_per_month}}/month</h3>
-                    </div>
-                </a>
-                {% elif plan.name == 'Pro' %}
-                <a href="{% url 'portal:plan_pro' %}">
-                    <div class="card-body" style="text-align:center; background-color:#0d5773">
-                        <h5 class="card-title" style="font-size:20px;color:white">{{plan.name}}</h5>
-                        <h3 style="color:white">${{plan.default_price_per_month}}/month</h3>
-                    </div>
-                </a>
-                {% elif plan.name == 'Enterprise' %}
-                <a href="{% url 'portal:plan_ent' %}">
-                    <div class="card-body" style="text-align:center; background-color:#0d5773">
-                        <h5 class="card-title" style="font-size:20px;color:white">{{plan.name}}</h5>
-                        <h3 style="color:white">${{plan.default_price_per_month}}/month</h3>
-                    </div>
-                </a>
-                {% endif %}
-                {% if plan.name == 'Free' %}
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">One business profile</li>
-                    <li class="list-group-item">Request Business Solutions</li>
-                    <li class="list-group-item">Full price for business solutions</li>
-                    <li class="list-group-item">Full price for all CG events tickets</li>
-                    <li class="list-group-item">Free Business registration and consultation</li>
-                </ul>
-                {% elif plan.name == 'Startup' %}
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">List one venture</li>
-                    <li class="list-group-item">Limited view if Investor's profile</li>
-                    <li class="list-group-item">Ability to accept or decline investor's request</li>
-                    <li class="list-group-item">Request Business Solutions</li>
-                    <li class="list-group-item">Discounted (40% off) business solutions with 1 year membership
-                        subscription
-                    </li>
-                    <li class="list-group-item">Discounted tickets for CG business events</li>
-                    <li class="list-group-item">1 free business analysis</li>
-                    <li class="list-group-item">1 free market analysis report</li>
-                    <li class="list-group-item">Free Business registration and consultation</li>
-                </ul>
-                {% elif plan.name == 'Pro' %}
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">List three venture</li>
-                    <li class="list-group-item">Full view of Investor's profile</li>
-                    <li class="list-group-item">Ability to accept or decline investor's request, view and send
-                        messages
-                    </li>
-                    <li class="list-group-item">Request Business Solutions</li>
-                    <li class="list-group-item">Discounted (40% off) business solutions with 1 year membership
-                        subscription
-                    </li>
-                    <li class="list-group-item">Discounted VIP tickets for CG business events</li>
-                    <li class="list-group-item">3 free business analysis</li>
-                    <li class="list-group-item">3 free market intelligence reports</li>
-                    <li class="list-group-item">Free Business registration and consultation</li>
-                </ul>
-                {% elif plan.name == 'Enterprise' %}
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">List five venture</li>
-                    <li class="list-group-item">Full view of Investor's profile</li>
-                    <li class="list-group-item">Ability to accept or decline investor's request, view and send
-                        messages
-                    </li>
-                    <li class="list-group-item">Request Business Solutions</li>
-                    <li class="list-group-item">Discounted (40% off) business solutions with 1 year membership
-                        subscription
-                    </li>
-                    <li class="list-group-item">Discounted VIP tickets for CG business events</li>
-                    <li class="list-group-item">5 free business analysis</li>
-                    <li class="list-group-item">5 free market intelligence reports</li>
-                    <li class="list-group-item">Free Business registration and consultation</li>
-                    <li class="list-group-item">Receive a custom monthly matching lists from experts</li>
-                </ul>
-                {% endif%}
-                {% if plan.name == 'Free'%}
-                {% elif plan.name == 'Startup' %}
-                <div class="card-body" style="text-align:center">
-                    <a href="{% url 'portal:plan_startup' %}" class="card-link btn btn-info">Select</a>
+            </a>
+            {% elif plan.name == 'Pro' %}
+            <a href="{% url 'portal:plan_pro' %}">
+                <div class="card-body" style="text-align:center; background-color:#0d5773">
+                    <h5 class="card-title" style="font-size:20px;color:white">{{plan.name}}</h5>
+                    <h3 style="color:white">${{plan.default_price_per_month}}/month</h3>
                 </div>
-                {% elif plan.name == 'Pro' %}
-                <div class="card-body" style="text-align:center">
-                    <a href="{% url 'portal:plan_pro' %}" class="card-link btn btn-info">Select</a>
+            </a>
+            {% elif plan.name == 'Enterprise' %}
+            <a href="{% url 'portal:plan_ent' %}">
+                <div class="card-body" style="text-align:center; background-color:#0d5773">
+                    <h5 class="card-title" style="font-size:20px;color:white">{{plan.name}}</h5>
+                    <h3 style="color:white">${{plan.default_price_per_month}}/month</h3>
                 </div>
-                {% elif plan.name == 'Enterprise' %}
-                <div class="card-body" style="text-align:center">
-                    <a href="{% url 'portal:plan_ent' %}" class="card-link btn btn-info">Select</a>
-                </div>
-                {% endif %}
+            </a>
+            {% endif %}
+            {% if plan.name == 'Free' %}
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">One business profile</li>
+                <li class="list-group-item">Request Business Solutions</li>
+                <li class="list-group-item">Full price for business solutions</li>
+                <li class="list-group-item">Full price for all CG events tickets</li>
+                <li class="list-group-item">Free Business registration and consultation</li>
+            </ul>
+            {% elif plan.name == 'Startup' %}
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">List one venture</li>
+                <li class="list-group-item">Limited view if Investor's profile</li>
+                <li class="list-group-item">Ability to accept or decline investor's request</li>
+                <li class="list-group-item">Request Business Solutions</li>
+                <li class="list-group-item">Discounted (40% off) business solutions with 1 year membership
+                    subscription
+                </li>
+                <li class="list-group-item">Discounted tickets for CG business events</li>
+                <li class="list-group-item">1 free business analysis</li>
+                <li class="list-group-item">1 free market analysis report</li>
+                <li class="list-group-item">Free Business registration and consultation</li>
+            </ul>
+            {% elif plan.name == 'Pro' %}
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">List three venture</li>
+                <li class="list-group-item">Full view of Investor's profile</li>
+                <li class="list-group-item">Ability to accept or decline investor's request, view and send
+                    messages
+                </li>
+                <li class="list-group-item">Request Business Solutions</li>
+                <li class="list-group-item">Discounted (40% off) business solutions with 1 year membership
+                    subscription
+                </li>
+                <li class="list-group-item">Discounted VIP tickets for CG business events</li>
+                <li class="list-group-item">3 free business analysis</li>
+                <li class="list-group-item">3 free market intelligence reports</li>
+                <li class="list-group-item">Free Business registration and consultation</li>
+            </ul>
+            {% elif plan.name == 'Enterprise' %}
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">List five venture</li>
+                <li class="list-group-item">Full view of Investor's profile</li>
+                <li class="list-group-item">Ability to accept or decline investor's request, view and send
+                    messages
+                </li>
+                <li class="list-group-item">Request Business Solutions</li>
+                <li class="list-group-item">Discounted (40% off) business solutions with 1 year membership
+                    subscription
+                </li>
+                <li class="list-group-item">Discounted VIP tickets for CG business events</li>
+                <li class="list-group-item">5 free business analysis</li>
+                <li class="list-group-item">5 free market intelligence reports</li>
+                <li class="list-group-item">Free Business registration and consultation</li>
+                <li class="list-group-item">Receive a custom monthly matching lists from experts</li>
+            </ul>
+            {% endif%}
+            {% if plan.name == 'Free'%}
+            {% elif plan.name == 'Startup' %}
+            <div class="card-body" style="text-align:center">
+                <a href="{% url 'portal:plan_startup' %}" class="card-link btn btn-info">Select</a>
             </div>
-            {% endfor %}
+            {% elif plan.name == 'Pro' %}
+            <div class="card-body" style="text-align:center">
+                <a href="{% url 'portal:plan_pro' %}" class="card-link btn btn-info">Select</a>
+            </div>
+            {% elif plan.name == 'Enterprise' %}
+            <div class="card-body" style="text-align:center">
+                <a href="{% url 'portal:plan_ent' %}" class="card-link btn btn-info">Select</a>
+            </div>
+            {% endif %}
         </div>
+        {% endfor %}
     </div>
+</div>
 
 </div>
 
