@@ -21,7 +21,13 @@
             {% endwith %}
         </h3>
         {% for user in results %}
+        {% if current_user_subscription == 'Free' %}
+        {% if user.is_investor %}
+        <h4><a href="{% url 'portal:plans' %}">Upgrade to view this user</a></h4>
+        {% else %}
         <h4><a href="{{user.profiles.get_absolute_url }}">{{ user.username }}</a></h4>
+        {% endif %}
+        {% endif %}
         {% empty %}
         <p>There are no results for your query.</p>
         {% endfor %}

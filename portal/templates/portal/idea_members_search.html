@@ -28,7 +28,7 @@
         <p><a href="{% url 'portal:idea_search' idea.id  %}">Search again</a></p>
         {% else %}
         <h1>Search for a user</h1>
-        <form action="." method="get">
+        <form action="{% url 'portal:idea_search' idea.id  %}" method="get">
             {{ form|crispy }}
             <input type="submit" class="btn btn-primary" value="Search">
         </form>

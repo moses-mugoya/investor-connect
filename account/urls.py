@@ -18,6 +18,7 @@ urlpatterns = [
     re_path(r'^profile/list/entrepreneur/$', views.profile_list_enterps, name='profile_list_entrep'),
     re_path(r'^profile/list/innovators/$', views.profile_list_innovators, name='profile_list_innovator'),
     re_path(r'^detail/(?P<id>\d+)/', views.profile_detail, name='profile_detail'),
+    re_path(r'^edit/note/(?P<id>\d+)/', views.edit_partner_note, name='edit-note'),
     re_path(r'^contact/form/', views.business_management, name='business_management')
 
 ]

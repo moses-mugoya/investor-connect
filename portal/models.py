@@ -2,7 +2,8 @@ from django.db import models
 from account.models import User
 from django.urls import reverse
 from djrichtextfield.models import RichTextField
-
+from account.models import UserSubscriptions
+from django.core.exceptions import ValidationError
 
 class Ideas(models.Model):
     user = models.ForeignKey(User, related_name='user_ideas', on_delete=models.CASCADE)
@@ -10,9 +11,9 @@ class Ideas(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
     description = models.TextField()
-    interest = models.CharField(max_length=50, null=True)
-    patent_number = models.PositiveIntegerField(blank=True, null=True)
-    copyright_number = models.PositiveIntegerField(blank=True, null=True)
+    patent_number = models.CharField(null=True, max_length=50)
+    copyright_number = models.CharField(null=True, max_length=50)
+    set_direct_investment = models.BooleanField(default=False)
     users_like = models.ManyToManyField(User,
                                         related_name='ideas_liked',
                                         blank=True)
@@ -40,20 +41,17 @@ class StartupBusiness(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
     company_name = models.CharField(max_length=250)
-    company_registration_number = models.IntegerField()
+    company_registration_number = models.CharField(max_length=50)
     founding_date = models.DateField()
     slogan = models.CharField(blank=True, max_length=250)
     pitch = models.TextField(blank=True)
     pitch_video_url = models.URLField(blank=True)
     customer_model = models.CharField(max_length=250)
-    stake_you_are_giving_up = models.PositiveIntegerField(null=True)
-    minimum_financing = models.DecimalField(max_digits=10, decimal_places=2)
-    financing_you_are_looking_for = models.DecimalField(max_digits=10, decimal_places=2)
     country = models.CharField(max_length=250)
     full_address = models.CharField(max_length=250)
     stage = models.CharField(max_length=250)
     sector = models.CharField(max_length=250)
-    interest = models.CharField(max_length=50)
+    set_direct_investment = models.BooleanField(default=False)
     users_like = models.ManyToManyField(User,
                                         related_name='business_liked',
                                         blank=True)
@@ -75,6 +73,38 @@ class StartupBusiness(models.Model):
         return self.created.strftime('%b')
 
 
+class BusinessDirectInvestment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    business = models.ForeignKey(StartupBusiness, on_delete=models.CASCADE)
+    stake_you_are_giving_up = models.PositiveIntegerField(null=True)
+    minimum_financing = models.DecimalField(max_digits=15, decimal_places=2, null=True)
+    financing_you_are_looking_for = models.DecimalField(max_digits=15, decimal_places=2, null=True)
+    number_of_investors = models.PositiveIntegerField()
+    declined = models.BooleanField(default=False)
+    approved = models.BooleanField(default=False)
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return 'Direct Investment for {}'.format(self.business)
+
+
+class IdeaDirectInvestment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    idea = models.ForeignKey(Ideas, on_delete=models.CASCADE)
+    stake_you_are_giving_up = models.PositiveIntegerField(null=True)
+    minimum_financing = models.DecimalField(max_digits=15, decimal_places=2, null=True)
+    financing_you_are_looking_for = models.DecimalField(max_digits=15, decimal_places=2, null=True)
+    number_of_investors = models.PositiveIntegerField()
+    approved = models.BooleanField(default=False)
+    declined = models.BooleanField(default=False)
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return 'Direct Investment for {}'.format(self.idea)
+
+
 class BusinessImages(models.Model):
     business = models.ForeignKey(StartupBusiness, on_delete=models.CASCADE, related_name='business_images')
     image = models.ImageField(upload_to='images/business/%Y/%m/%d')
@@ -91,6 +121,7 @@ class IdeaInvestments(models.Model):
     investor = models.ForeignKey(User, related_name='user_idea', on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
     approved = models.BooleanField(default=False)
+    declined = models.BooleanField(default=False)
     modified = models.DateTimeField(auto_now=True)
 
     class Meta:
@@ -110,9 +141,9 @@ class IdeaInvestments(models.Model):
 class BusinessInvestments(models.Model):
     business = models.ForeignKey(StartupBusiness, related_name='invest_business', on_delete=models.CASCADE)
     investor = models.ForeignKey(User, related_name='user_business', on_delete=models.CASCADE)
-    investor_amount = models.DecimalField(max_digits=10, decimal_places=2)
     created = models.DateTimeField(auto_now_add=True)
     approved = models.BooleanField(default=False)
+    declined = models.BooleanField(default=False)
     modified = models.DateTimeField(auto_now=True)
 
     class Meta:
@@ -127,6 +158,30 @@ class BusinessInvestments(models.Model):
 
     def month_created(self):
         return self.created.strftime('%b')
+
+
+class BusinessDirectInvestors(models.Model):
+    investor = models.ForeignKey(User, on_delete=models.CASCADE)
+    business = models.ForeignKey(StartupBusiness, related_name='direct_biz_invest', on_delete=models.CASCADE)
+    amount_investing = models.PositiveIntegerField()
+    percentage_stake = models.PositiveIntegerField()
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return 'direct investment for {}'.format(self.business)
+
+
+class IdeaDirectInvestors(models.Model):
+    investor = models.ForeignKey(User, on_delete=models.CASCADE)
+    idea = models.ForeignKey(Ideas, related_name='direct_idea_invest', on_delete=models.CASCADE)
+    amount_investing = models.PositiveIntegerField()
+    percentage_stake = models.PositiveIntegerField()
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return 'direct investment for {}'.format(self.idea)
 
 
 class BusinessTeams(models.Model):
@@ -211,6 +266,21 @@ class GroupChats(models.Model):
         return 'messages for {}'.format(self.business)
 
 
+class GroupChatsIdea(models.Model):
+    idea = models.ForeignKey(Ideas, related_name='group_chats_idea', on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+    message = models.CharField(max_length=1000)
+    user = models.ForeignKey(User, related_name='user_group_chat_idea', on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name_plural = 'Group Chats'
+        ordering = ('created',)
+
+    def __str__(self):
+        return 'messages for {}'.format(self.idea)
+
+
 class ServiceCategories(models.Model):
     name = models.CharField(max_length=200)
     created = models.DateTimeField(auto_now_add=True)
@@ -253,6 +323,7 @@ class ServiceProviders(models.Model):
 
 class PartnersPaymentNotes(models.Model):
     name = models.CharField(max_length=100, null=True)
+    amount = models.PositiveIntegerField(null=True)
     partner = models.ForeignKey(Partners, related_name='partners_pay', on_delete=models.CASCADE)
     paid = models.BooleanField(default=False)
     notes = RichTextField()
@@ -287,6 +358,7 @@ class Services(models.Model):
     service_cost = models.PositiveIntegerField(default=0)
     centinum_commission = models.PositiveIntegerField(default=0)
     sp_payment = models.PositiveIntegerField(default=0)
+    paid = models.BooleanField(default=False)
 
     def __str__(self):
         return 'services for {}'.format(self.client.username)

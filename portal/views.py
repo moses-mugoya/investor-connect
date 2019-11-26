@@ -2,11 +2,12 @@ import stripe
 from django.views.generic.base import TemplateView
 from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import BusinessForm, IdeaForm, BizInvestmentForm, \
-    BusinessImageForm, GroupChatForm, BusinessForm2, PartnersForm, PartnersPaymentForm, ServicesForm, ServiceChat, \
-    RatingsForm
+from .forms import BusinessForm, IdeaForm, \
+    BusinessImageForm, GroupChatForm, PartnersForm, PartnersPaymentForm, ServicesForm, ServiceChat, \
+    RatingsForm, DirectInvestmentBizForm, BizDirectInvestorsForm, IdeaDirectInvestorsForm
 from .models import Ideas, StartupBusiness, IdeaInvestments, BusinessInvestments, \
-    BusinessTeams, IdeaTeams, CentinumVentures, BusinessImages, Partners, CentinumServices, Services
+    BusinessTeams, IdeaTeams, CentinumVentures, BusinessImages, Partners, CentinumServices, Services,\
+    PartnersPaymentNotes, BusinessDirectInvestment, IdeaDirectInvestment, BusinessDirectInvestors, IdeaDirectInvestors
 from django.contrib.auth.decorators import login_required
 from account.models import Profile, User, UserSubscriptions, Plans, PlanCategories, Subscriptions
 from .decorators import innovator_required, investor_required, entrepreneur_required, verification_required
@@ -80,22 +81,31 @@ def idea_like(request):
 @login_required(login_url='loginApp:login')
 @verification_required
 def home(request):
-    ideas = Ideas.objects.all()
+    current_user_subscription = UserSubscriptions.objects.get(user=request.user)
+    current_user_subscription = current_user_subscription.plan
+    current_user_subscription = str(current_user_subscription.plan_category)
+    print(current_user_subscription)
+    ideas = Ideas.objects.filter(user=request.user, set_direct_investment=False)
     ideas_count = ideas.count()
-    startup = StartupBusiness.objects.all()
+    startup = StartupBusiness.objects.filter(set_direct_investment=False)
     startup_count = startup.count()
     centinum = CentinumVentures.objects.all()
     centinum_count = centinum.count()
     return render(request, 'portal/home.html',
-                  {'centinum': centinum, 'centinum_count': centinum_count, 'ideas': ideas, 'ideas_count': ideas_count,
-                   'startup': startup, 'startup_count': startup_count})
+                  {'centinum': centinum,
+                   'centinum_count': centinum_count,
+                   'ideas': ideas,
+                   'ideas_count': ideas_count,
+                   'startup': startup,
+                   'startup_count': startup_count,
+                   'current_user_subscription': current_user_subscription})
 
 
 @login_required
 def centinum(request):
     ideas = Ideas.objects.all()
     ideas_count = ideas.count()
-    startup = StartupBusiness.objects.all()
+    startup = StartupBusiness.objects.filter(set_direct_investment=False)
     startup_count = startup.count()
     centinum = CentinumVentures.objects.all()
     centinum_count = centinum.count()
@@ -112,7 +122,7 @@ def centinum(request):
 def home_biz(request):
     ideas = Ideas.objects.all()
     ideas_count = ideas.count()
-    startup = StartupBusiness.objects.all()
+    startup = StartupBusiness.objects.filter(set_direct_investment=False)
     startup_count = startup.count()
     centinum = CentinumVentures.objects.all()
     centinum_count = centinum.count()
@@ -154,9 +164,18 @@ def entrepreneur(request):
 
 
 def business_detail(request, id):
+    current_user_subscription = UserSubscriptions.objects.get(user=request.user)
+    current_user_subscription = current_user_subscription.plan
+    current_user_subscription = str(current_user_subscription.plan_category)
+    biz_direct = BusinessDirectInvestment.objects.all()
+    biz_direct_count = biz_direct.count()
     team_members = []
     all_investors = []
     business = get_object_or_404(StartupBusiness, id=id)
+    dir_biz_investors = business.direct_biz_invest.all()
+    dir_biz_investors_array = []
+    for dir in dir_biz_investors:
+        dir_biz_investors_array.append(dir.investor)
     images = BusinessImages.objects.filter(business=business)
     team_biz = business.team_business.all()
     for team_mem in team_biz:
@@ -169,51 +188,42 @@ def business_detail(request, id):
     startup = StartupBusiness.objects.all()
     startup_count = startup.count()
     profile = get_object_or_404(Profile, user=request.user)
-    min_amount_per = (
-                                 business.minimum_financing * business.stake_you_are_giving_up) / business.financing_you_are_looking_for
-    min_amount_per = round(min_amount_per, 2)
-    invest_per = 0
+    # min_amount_per = (business.minimum_financing * business.stake_you_are_giving_up) / business.financing_you_are_looking_for
+    # min_amount_per = round(min_amount_per, 2)
+    # invest_per = 0
     investors = business.invest_business.filter(approved=True)
     for inv in investors:
         all_investors.append(inv.investor)
     investors_count = business.invest_business.filter(approved=True).count()
-    if request.method == 'POST':
-        biz_invest_form = BizInvestmentForm(data=request.POST)
-        if biz_invest_form.is_valid():
-            invest_amount = biz_invest_form.cleaned_data['investor_amount']
-            if invest_amount < business.minimum_financing:
-                messages.error(request, "The minimum amount required is {}".format(business.minimum_financing))
-                return redirect('portal:business_detail', business.id)
-            invest_per = (invest_amount * business.stake_you_are_giving_up) / business.financing_you_are_looking_for
-            invest_per = round(invest_per, 2)
-            new_form = biz_invest_form.save(commit=False)
-            new_form.investor = request.user
-            new_form.business = business
-            new_form.save()
-            messages.success(request,
-                             "Investment successful! You have invested KSH {} which is {}%".format(invest_amount,
-                                                                                                   invest_per))
-            return redirect('portal:business_detail', business.id)
-
-    else:
-        biz_invest_form = BizInvestmentForm()
+    # if request.method == 'POST':
+    #     biz_invest_form = BizInvestmentForm(data=request.POST)
+    #     if biz_invest_form.is_valid():
+    #         invest_amount = biz_invest_form.cleaned_data['investor_amount']
+    #         if invest_amount < business.minimum_financing:
+    #             messages.error(request, "The minimum amount required is {}".format(business.minimum_financing))
+    #             return redirect('portal:business_detail', business.id)
+    #         invest_per = (invest_amount * business.stake_you_are_giving_up) / business.financing_you_are_looking_for
+    #         invest_per = round(invest_per, 2)
+    #         new_form = biz_invest_form.save(commit=False)
+    #         new_form.investor = request.user
+    #         new_form.business = business
+    #         new_form.save()
+    #         messages.success(request,
+    #                          "Investment successful! You have invested KSH {} which is {}%".format(invest_amount,
+    #                                                                                                invest_per))
+    #         return redirect('portal:business_detail', business.id)
+    #
+    # else:
+    #     biz_invest_form = BizInvestmentForm()
 
     if request.method == 'POST':
         business_form = BusinessForm(data=request.POST, instance=business)
-        business_form2 = BusinessForm2(data=request.POST, instance=business)
-        business_image_form = BusinessImageForm(data=request.POST, instance=business)
-        if business_form.is_valid() and business_form2.is_valid() and business_image_form.is_valid():
+        if business_form.is_valid():
             business = business_form.save(commit=False)
-            business2 = business_form2.save(commit=False)
-            business3 = business_image_form.save(commit=False)
-            business3.save()
-            business2.save()
             business.save()
             return redirect('account:profile')
     else:
         business_form = BusinessForm(instance=business)
-        business_form2 = BusinessForm2(instance=business)
-        business_image_form = BusinessImageForm(instance=business)
 
     return render(request, 'portal/business_detail.html', {'business': business,
                                                            'images': images,
@@ -225,21 +235,108 @@ def business_detail(request, id):
                                                            'startup': startup,
                                                            'startup_count': startup_count,
                                                            'investors': investors,
-                                                           'min_amount_per': min_amount_per,
                                                            'investors_count': investors_count,
                                                            'business_form': business_form,
-                                                           'biz_invest_form': biz_invest_form,
-                                                           'business_form2': business_form2,
-                                                           'business_image_form': business_image_form,
                                                            'team_members': team_members,
                                                            'all_investors': all_investors,
-                                                           'team_biz': team_biz})
+                                                           'team_biz': team_biz,
+                                                           'biz_direct_count': biz_direct_count,
+                                                           'dir_biz_investors_array': dir_biz_investors_array,
+                                                           'dir_biz_investors': dir_biz_investors,
+                                                           'current_user_subscription': current_user_subscription
+                                                           })
+
+
+def direct_biz_invest(request, id):
+    biz_direct = BusinessDirectInvestors.objects.all()
+    biz_direct_count = biz_direct.count()
+    direct_biz = BusinessDirectInvestment.objects.get(id=id)
+    print(biz_direct_count)
+    business = direct_biz.business
+    min_amount_per = (direct_biz.minimum_financing * direct_biz.stake_you_are_giving_up) / direct_biz.financing_you_are_looking_for
+    min_amount_per = round(min_amount_per, 2)
+    invest_per = 0
+    if request.method == 'POST':
+        biz_invest_form = BizDirectInvestorsForm(data=request.POST)
+        if biz_invest_form.is_valid():
+            invest_amount = biz_invest_form.cleaned_data['amount_investing']
+            if invest_amount < direct_biz.minimum_financing:
+                messages.error(request, "The minimum amount required is {}".format(direct_biz.minimum_financing))
+            elif invest_amount > direct_biz.financing_you_are_looking_for:
+                messages.error(request, "You have invested more than is required. Reduce the amount and try again")
+            elif biz_direct_count == direct_biz.number_of_investors:
+                messages.error(request, "There is already enough investors required")
+            else:
+                invest_per = (invest_amount * direct_biz.stake_you_are_giving_up) / direct_biz.financing_you_are_looking_for
+                invest_per = round(invest_per, 2)
+                new_form = biz_invest_form.save(commit=False)
+                new_form.investor = request.user
+                new_form.business = business
+                new_form.percentage_stake = invest_per
+                new_form.save()
+                messages.success(request,
+                                 "Investment successful! You have invested KSH {} which is {}%".format(invest_amount,
+                                                                                                       invest_per))
+                return redirect('account:profile')
+
+    else:
+        biz_invest_form = BizDirectInvestorsForm()
+    return render(request, 'portal/biz_direct_investors.html', {'biz_invest_form': biz_invest_form, })
+
+
+def direct_idea_invest(request, id):
+    dir_idea_investors = IdeaDirectInvestors.objects.all()
+    dir_idea_investors_array = []
+    for dir in dir_idea_investors:
+        dir_idea_investors_array.append(dir.investor)
+    biz_direct = IdeaDirectInvestors.objects.all()
+    biz_direct_count = biz_direct.count()
+    direct_biz = IdeaDirectInvestment.objects.get(id=id)
+    idea = direct_biz.idea
+    print(biz_direct_count)
+    min_amount_per = (direct_biz.minimum_financing * direct_biz.stake_you_are_giving_up) / direct_biz.financing_you_are_looking_for
+    min_amount_per = round(min_amount_per, 2)
+    invest_per = 0
+    if request.method == 'POST':
+        biz_invest_form = IdeaDirectInvestorsForm(data=request.POST)
+        if biz_invest_form.is_valid():
+            invest_amount = biz_invest_form.cleaned_data['amount_investing']
+            if invest_amount < direct_biz.minimum_financing:
+                messages.error(request, "The minimum amount required is {}".format(direct_biz.minimum_financing))
+            elif invest_amount > direct_biz.financing_you_are_looking_for:
+                messages.error(request, "You have invested more than is required. Reduce the amount and try again")
+            elif biz_direct_count == direct_biz.number_of_investors:
+                messages.error(request, "There is already enough investors required")
+            else:
+                invest_per = (invest_amount * direct_biz.stake_you_are_giving_up) / direct_biz.financing_you_are_looking_for
+                invest_per = round(invest_per, 2)
+                new_form = biz_invest_form.save(commit=False)
+                new_form.investor = request.user
+                new_form.idea = idea
+                new_form.percentage_stake = invest_per
+                new_form.save()
+                messages.success(request,
+                                 "Investment successful! You have invested KSH {} which is {}%".format(invest_amount,
+                                                                                                       invest_per))
+                return redirect('account:profile')
+
+    else:
+        biz_invest_form = IdeaDirectInvestorsForm()
+    return render(request, 'portal/idea_direct_investors.html', {'biz_invest_form': biz_invest_form,
+                                                                 'dir_idea_investors_array': dir_idea_investors_array})
 
 
 def idea_detail(request, id):
+    current_user_subscription = UserSubscriptions.objects.get(user=request.user)
+    current_user_subscription = current_user_subscription.plan
+    current_user_subscription = str(current_user_subscription.plan_category)
     team_members = []
     all_investors = []
     idea = get_object_or_404(Ideas, id=id)
+    dir_idea_investors = idea.direct_idea_invest.all()
+    dir_idea_investors_array = []
+    for dir in dir_idea_investors:
+        dir_idea_investors_array.append(dir.investor)
     user_profile = get_object_or_404(Profile, user=request.user)
     centinum = CentinumVentures.objects.all()
     centinum_count = centinum.count()
@@ -275,7 +372,10 @@ def idea_detail(request, id):
                                                        'investors_count': investors_count,
                                                        'user_profile': user_profile,
                                                        'idea_form': idea_form,
-                                                       'idea_teams': idea_teams})
+                                                       'idea_teams': idea_teams,
+                                                       'dir_idea_investors_array': dir_idea_investors_array,
+                                                       'dir_idea_investors': dir_idea_investors,
+                                                       'current_user_subscription': current_user_subscription})
 
 
 @innovator_required
@@ -344,7 +444,10 @@ def edit_business(request, id):
         if business_form.is_valid():
             business = business_form.save(commit=False)
             business.save()
+            messages.success(request, 'Updated successfully')
             return redirect('portal:entrepreneur')
+        else:
+            messages.error(request, 'Error updating the start up')
     else:
         business_form = BusinessForm(instance=business)
     return render(request, 'portal/edit_business.html', {'business_form': business_form})
@@ -378,6 +481,7 @@ def invest_idea(request, id):
     ideaInvest.idea = idea
     ideaInvest.investor = request.user
     ideaInvest.save()
+    messages.success(request, "Request sent successfully")
     return redirect('account:profile')
 
 
@@ -398,7 +502,8 @@ def invest_business(request, id):
     businesInvest.business = busines
     businesInvest.investor = request.user
     businesInvest.save()
-    return redirect('portal:investments')
+    messages.success(request, "Request sent successfully")
+    return redirect('account:profile')
 
 
 @login_required
@@ -408,7 +513,8 @@ def join_business(request, id):
     biz_team.business = business
     biz_team.member = request.user
     biz_team.save()
-    return redirect('portal:home')
+    messages.success(request, "Joined team successfully")
+    return redirect('account:profile')
 
 
 @login_required
@@ -418,7 +524,8 @@ def join_idea(request, id):
     idea_team.idea = idea
     idea_team.member = request.user
     idea_team.save()
-    return redirect('portal:home')
+    messages.success(request, "joined team successfully")
+    return redirect('account:profile')
 
 
 def terms(request):
@@ -568,6 +675,43 @@ def cancel_subscription(request):
     return redirect('portal:plans')
 
 
+def pay_for_service(request, id):
+    service = Services.objects.get(id=id)
+    charge = stripe.Charge.create(
+        amount=service.service_cost * 100,
+        currency='usd',
+        description='Payment for Service',
+        source=request.POST['stripeToken']
+    )
+    if charge.status == "succeeded":
+        service.paid = True
+        service.save()
+        send_mail('Task Active', 'Hi {}!, your assigned task is now active. Check your tasks ASAP'.format(service.service_provider.username), 'centinum@gmail.com', [service.service_provider.email])
+        messages.success(request, "Hi {}, your payment was successful".format(request.user.username))
+        return redirect('account:profile')
+    else:
+        messages.error(request, "Hi {}", "Your payment was not successful.Please try again".format(request.user.username))
+        return redirect('account:profile')
+
+
+def pay_for_notes(request, id):
+    note = PartnersPaymentNotes.objects.get(id=id)
+    charge = stripe.Charge.create(
+        amount=note.amount * 100,
+        currency='usd',
+        description='Payment for Service',
+        source=request.POST['stripeToken']
+    )
+    if charge.status == "succeeded":
+        note.paid = True
+        note.save()
+        messages.success(request, "Hi {}, your payment was successful".format(request.user.username))
+        return redirect('account:profile')
+    else:
+        messages.error(request, "Hi {}", "Your payment was not successful.Please try again".format(request.user.username))
+        return redirect('account:profile')
+
+
 @csrf_exempt
 def payment_done(request):
     profile = get_object_or_404(Profile, user=request.user)
@@ -583,7 +727,6 @@ def payment_canceled(request):
 
 def failed_subscription(request):
     return render(request, 'portal/sub_fail.html')
-
 
 
 def paypal_process(request):
@@ -625,6 +768,30 @@ def group_chat_view(request, id):
         group_form = GroupChatForm()
     return render(request, 'portal/group_chat.html',
                   {'group_chats': group_chats, 'group_form': group_form, 'business': business})
+
+
+def group_chat_view_idea(request, id):
+    idea = get_object_or_404(Ideas, id=id)
+    group_chats = idea.group_chats_idea.all()
+
+    if request.method == 'POST':
+        group_form = GroupChatForm(request.POST)
+        if group_form.is_valid():
+            user_text = group_form.cleaned_data['message']
+            user_text = user_text.lower()
+            if 'money' in user_text or 'cash' in user_text or 'payment' in user_text:
+                messages.error(request, 'Your text contains unwanted phrases')
+            else:
+                new_group = group_form.save(commit=False)
+                new_group.idea = idea
+                new_group.user = request.user
+                new_group.save()
+                group_form = GroupChatForm()
+
+    else:
+        group_form = GroupChatForm()
+    return render(request, 'portal/group_chat_idea.html',
+                  {'group_chats': group_chats, 'group_form': group_form, 'idea': idea})
 
 
 def service_timeline_chat(request, id):
@@ -730,13 +897,15 @@ def accept_biz_request(request, id):
 
 def decline_idea_request(request, id):
     idea = get_object_or_404(IdeaInvestments, id=id)
-    idea.delete()
+    idea.declined = True
+    idea.save()
     return redirect('account:profile')
 
 
 def decline_biz_request(request, id):
     business = get_object_or_404(BusinessInvestments, id=id)
-    business.delete()
+    business.declined = True
+    business.save()
     return redirect('account:profile')
 
 

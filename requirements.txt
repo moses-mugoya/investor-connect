@@ -1,8 +1,12 @@
 bootstrap4==0.1.0
 certifi==2019.6.16
+cffi==1.13.2
 chardet==3.0.4
 config==0.3.9
+cryptography==2.8
 dj-database-url==0.5.0
+dj-paypal==0.13.0
+dj-stripe==2.1.1
 Django==2.2.5
 django-celery-beat==1.5.0
 django-countries==5.3.3
@@ -14,8 +18,12 @@ django-richtextfield==1.4.0
 django-timezone-field==3.0
 gunicorn==19.9.0
 idna==2.8
+jsonfield==2.0.2
+paypalrestsdk==1.13.1
 Pillow==6.1.0
 psycopg2==2.8.3
+pycparser==2.19
+pyOpenSSL==19.0.0
 python-crontab==2.3.8
 python-dateutil==2.8.0
 python-decouple==3.1

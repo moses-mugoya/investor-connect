@@ -5,8 +5,8 @@
 {% block body %}
 <ol class="breadcrumb">
 
-  <li class=""><a href="{% url 'portal:home' %}">Home</a></li>
-  <li class="active"><a>Service Detail</a></li>
+    <li class=""><a href="{% url 'portal:home' %}">Home</a></li>
+    <li class="active"><a>Service Detail</a></li>
 
 </ol>
 <section id="team" class="pb-5">
@@ -26,12 +26,14 @@
             {% endif %}
             {% endfor %}
             {% endif %}
-            <p>Please confirm that you want to request for {{service.name}}</p>
+            <p style="margin-left: 20px">Please confirm that you want to request for {{service.name}}</p>
             <br>
-            <form method="post" action=".">
-                {%csrf_token%}
-                <input type="submit" value="confirm" class="btn btn-primary">
-            </form>
+            <div style="margin-left: 20px">
+                <form method="post" action=".">
+                    {%csrf_token%}
+                    <input type="submit" value="confirm" class="btn btn-primary">
+                </form>
+            </div>
         </div>
     </div>
 </section>

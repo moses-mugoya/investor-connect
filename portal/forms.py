@@ -1,9 +1,12 @@
 from django import forms
 from .models import StartupBusiness, Ideas, IdeaInvestments, BusinessInvestments, GroupChats, Partners,\
-    PartnersPaymentNotes, Services, ServiceProviders, ServiceTimelineChats, Reports, ServiceProviderRatings
+    PartnersPaymentNotes, Services, ServiceProviders, ServiceTimelineChats, Reports, \
+    ServiceProviderRatings, BusinessDirectInvestment, IdeaDirectInvestment, BusinessDirectInvestors,\
+    IdeaDirectInvestors
 from django_countries import Countries
 from .models import BusinessImages
 from djrichtextfield.widgets import RichTextWidget
+from account.models import UserSubscriptions
 
 
 class BusinessForm(forms.ModelForm):
@@ -39,40 +42,70 @@ class BusinessForm(forms.ModelForm):
     company_name = forms.CharField(widget=forms.TextInput, required=True)
     stage = forms.ChoiceField(choices=CHOICE1)
     sector = forms.ChoiceField(choices=CHOICE2)
-    interest = forms.ChoiceField(choices=CHOICE3)
 
     class Meta:
         model = StartupBusiness
-        fields = ('name', 'company_name','company_registration_number', 'customer_model', 'pitch', 'pitch_video_url', 'slogan','stake_you_are_giving_up', 'minimum_financing', 'financing_you_are_looking_for', 'sector', 'full_address', 'stage', 'country', 'founding_date', 'interest')
+        fields = ('name', 'company_name','company_registration_number', 'customer_model', 'pitch', 'pitch_video_url',
+                  'slogan', 'sector', 'full_address', 'stage', 'country', 'founding_date', 'set_direct_investment')
 
 
-class BusinessForm2(forms.ModelForm):
+class DirectInvestmentBizForm(forms.ModelForm):
+    stake_you_are_giving_up = forms.CharField(widget=forms.NumberInput(attrs={'placeholder': 'this should be in (%) percentage'}))
 
     class Meta:
-        model = StartupBusiness
-        fields = ('financing_you_are_looking_for', 'minimum_financing', 'stake_you_are_giving_up')
+        model = BusinessDirectInvestment
+        fields = ('business', 'financing_you_are_looking_for', 'minimum_financing', 'stake_you_are_giving_up',
+                  'number_of_investors')
+
+    def __init__(self, request, *args, **kwargs):
+        super(DirectInvestmentBizForm, self).__init__(*args, **kwargs)
+        try:
+            self.fields['business'].queryset = StartupBusiness.objects.filter(set_direct_investment=True, user=request.user)
+        except StartupBusiness.DoesNotExist:
+            ### there is not userextend corresponding to this user, do what you want
+            raise Exception('object does not exist')
+            pass
+
+
+class DirectInvestmentIdeaForm(forms.ModelForm):
+    stake_you_are_giving_up = forms.CharField(
+        widget=forms.NumberInput(attrs={'placeholder': 'this should be in (%) percentage'}))
+
+    class Meta:
+        model = IdeaDirectInvestment
+        fields = ('idea', 'financing_you_are_looking_for', 'minimum_financing', 'stake_you_are_giving_up',
+                  'number_of_investors')
+
+    def __init__(self, request, *args, **kwargs):
+        super(DirectInvestmentIdeaForm, self).__init__(*args, **kwargs)
+        try:
+            self.fields['idea'].queryset = Ideas.objects.filter(set_direct_investment=True, user=request.user)
+        except Ideas.DoesNotExist:
+            ### there is not userextend corresponding to this user, do what you want
+            raise Exception('object does not exist')
+            pass
+
+# class BusinessForm2(forms.ModelForm):
+#
+#     class Meta:
+#         model = StartupBusiness
+#         fields = ('financing_you_are_looking_for', 'minimum_financing', 'stake_you_are_giving_up')
 
 
 class IdeaForm(forms.ModelForm):
-    CHOICE3 = [
-        ('Networking', 'Networking'),
-        ('Partnership', 'Partnership'),
-        ('Financing', 'Financing'),
-        ('Mentorship', 'Mentorship')
-    ]
-    interest = forms.ChoiceField(choices=CHOICE3)
 
     class Meta:
         model = Ideas
-        fields = ('name', 'description', 'interest', 'patent_number', 'copyright_number')
+        fields = ('name', 'description', 'patent_number', 'copyright_number', 'set_direct_investment')
 
 
-class BizInvestmentForm(forms.ModelForm):
-    investor_amount = forms.DecimalField(label='Amount you are investing with')
 
-    class Meta:
-        model = BusinessInvestments
-        fields = ('investor_amount',)
+# class BizInvestmentForm(forms.ModelForm):
+#     investor_amount = forms.DecimalField(label='Amount you are investing with')
+#
+#     class Meta:
+#         model = BusinessInvestments
+#         fields = ('investor_amount',)
 
 
 class BusinessImageForm(forms.ModelForm):
@@ -125,7 +158,7 @@ class PartnersPaymentForm(forms.ModelForm):
 
     class Meta:
         model = PartnersPaymentNotes
-        fields = ('name', 'notes',)
+        fields = ('name', 'amount', 'notes',)
 
 
 class ServicesForm(forms.ModelForm):
@@ -153,6 +186,23 @@ class RatingsForm(forms.ModelForm):
     class Meta:
         model = ServiceProviderRatings
         fields = ('rating', 'review')
+
+
+class IdeaDirectInvestorsForm(forms.ModelForm):
+
+    class Meta:
+        model = IdeaDirectInvestors
+        fields = ('amount_investing', )
+
+
+class BizDirectInvestorsForm(forms.ModelForm):
+
+    class Meta:
+        model = BusinessDirectInvestors
+        fields = ('amount_investing', )
+
+
+
 
 
 

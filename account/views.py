@@ -5,12 +5,14 @@ from .forms import UserRegistrationForm, UserEditForm, ChatForm, SearchForm, Ver
 from .forms import ProfileEditForm, BusinessManagementForm
 from .models import Profile, Chat, User, Plans, UserSubscriptions
 from portal.models import Ideas, StartupBusiness, BusinessInvestments, IdeaInvestments, CentinumVentures,\
-    BusinessImages, Partners, PartnersPaymentNotes, Services, ServiceProviders
+    BusinessImages, Partners, PartnersPaymentNotes, Services, ServiceProviders, BusinessDirectInvestment,\
+    IdeaDirectInvestment, IdeaDirectInvestors, BusinessDirectInvestors
 from portal.forms import IdeaForm, BusinessForm, BusinessImageForm, PartnersForm, PartnersPaymentForm, \
-    ProvidersForm, ReportForm
+    ProvidersForm, ReportForm, DirectInvestmentBizForm, DirectInvestmentIdeaForm
 from django.contrib.postgres.search import SearchVector
 from django.forms import modelformset_factory
 from django.core.mail import send_mail
+from django.conf import settings
 
 
 def register(request):
@@ -74,22 +76,40 @@ def edit(request):
 
 
 def profile(request):
+    key = settings.STRIPE_PUBLISHABLE_KEY
     partner_user = None
+    user_form = None
+    profile_form = None
+    idea_form2 = None
+    business_form = None
+    pat_edit_form = None
+    provider_form = None
+    report_form = None
+    partner_notes_form = None
+    biz_direct_form = None
+    idea_direct_form = None
+    current_user_subscription = UserSubscriptions.objects.get(user=request.user)
+    current_user_subscription = current_user_subscription.plan
+    current_user_subscription = str(current_user_subscription.plan_category)
+    idea_direct_invest = IdeaDirectInvestment.objects.filter(user=request.user)
+    biz_direct_invest = BusinessDirectInvestment.objects.filter(user=request.user)
     if request.user.is_partner:
         partner_user = request.user.user_partner
     services = Services.objects.filter(client=request.user)
     provider_services = Services.objects.filter(service_provider=request.user)
     biz_investment_requests = BusinessInvestments.objects.filter(business__user=request.user)
+    print(biz_investment_requests)
     idea_investment_requests = IdeaInvestments.objects.filter(idea__user=request.user)
     profile = get_object_or_404(Profile, user=request.user)
     centinum = CentinumVentures.objects.all()
     centinum_count = centinum.count()
-    ideas = Ideas.objects.all()
+    ideas = Ideas.objects.filter(user=request.user, set_direct_investment=False)
     ideas_count = ideas.count()
-    startup = StartupBusiness.objects.all()
-    user_biz = StartupBusiness.objects.filter(user=request.user)
+    startup = StartupBusiness.objects.filter(set_direct_investment=False)
+    user_biz = StartupBusiness.objects.filter(user=request.user, set_direct_investment=False)
+    user_biz_direct = StartupBusiness.objects.filter(user=request.user, set_direct_investment=True)
     user_biz_count = user_biz.count()
-    user_idea = Ideas.objects.filter(user=request.user)
+    user_idea = Ideas.objects.filter(user=request.user, set_direct_investment=False)
     user_idea_count = user_idea.count()
     startup_count = startup.count()
     biz_investments = BusinessInvestments.objects.filter(investor=request.user)
@@ -130,11 +150,48 @@ def profile(request):
         if 'idea_add' in request.POST:
             idea_form2 = IdeaForm(data=request.POST)
             if idea_form2.is_valid():
-                new_idea_form = idea_form2.save(commit=False)
-                new_idea_form.user = request.user
-                new_idea_form.save()
-                messages.success(request, 'Idea added successfully')
-                return redirect('account:profile')
+                current_user_subscription = UserSubscriptions.objects.get(user=request.user)
+                current_user_subscription = current_user_subscription.plan
+                all_ideas = Ideas.objects.filter(user=request.user)
+                all_ideas_count = all_ideas.count()
+                print(current_user_subscription.plan_category)
+                if str(current_user_subscription.plan_category) == 'Free':
+                    if all_ideas_count >= 1:
+                        messages.error(request, "You have already added {} idea(s) Please upgrade your membership to be able to add more ideas".format(all_ideas_count))
+                    else:
+                        new_idea_form = idea_form2.save(commit=False)
+                        new_idea_form.user = request.user
+                        new_idea_form.save()
+                        messages.success(request, 'Idea added successfully')
+                        return redirect('account:profile')
+                elif str(current_user_subscription.plan_category) == 'Startup':
+                    if all_ideas_count >= 1:
+                        messages.error(request, "You have already added {} idea(s) Please upgrade your membership to be able to add more ideas".format(all_ideas_count))
+                    else:
+                        new_idea_form = idea_form2.save(commit=False)
+                        new_idea_form.user = request.user
+                        new_idea_form.save()
+                        messages.success(request, 'Idea added successfully')
+                        return redirect('account:profile')
+                elif str(current_user_subscription.plan_category) == 'Pro':
+                    if all_ideas_count >= 3:
+                        messages.error(request, "You have already added {} idea(s) Please upgrade your membership to be able to add more ideas".format(all_ideas_count))
+                    else:
+                        new_idea_form = idea_form2.save(commit=False)
+                        new_idea_form.user = request.user
+                        new_idea_form.save()
+                        messages.success(request, 'Idea added successfully')
+                        return redirect('account:profile')
+                elif str(current_user_subscription.plan_category) == 'Enterprise':
+                    if all_ideas_count >= 5:
+                        messages.error(request, "You have already added {} idea(s) Please upgrade your membership to be able to add more ideas".format(all_ideas_count))
+                    else:
+                        new_idea_form = idea_form2.save(commit=False)
+                        new_idea_form.user = request.user
+                        new_idea_form.save()
+                        messages.success(request, 'Idea added successfully')
+                        return redirect('account:profile')
+
             else:
                 messages.error(request, 'Error adding your idea! Please check your details ')
     else:
@@ -145,15 +202,93 @@ def profile(request):
         if 'business_add' in request.POST:
             business_form = BusinessForm(data=request.POST)
             if business_form.is_valid():
-                new_business_form = business_form.save(commit=False)
-                new_business_form.user = request.user
-                new_business_form.save()
-                messages.success(request, "Updated successfully")
-                return redirect('account:profile')
+                current_user_subscription = UserSubscriptions.objects.get(user=request.user)
+                current_user_subscription = current_user_subscription.plan
+                all_biz = StartupBusiness.objects.filter(user=request.user)
+                all_biz_count = all_biz.count()
+                print(current_user_subscription.plan_category)
+                if str(current_user_subscription.plan_category) == 'Free':
+                    print("this is being free")
+                    if all_biz_count >= 1:
+                        messages.error(request,
+                                       "You have already added {} startup(s) Please upgrade your membership to be able to add more startup".format(
+                                           all_biz_count))
+                    else:
+                        new_business_form = business_form.save(commit=False)
+                        new_business_form.user = request.user
+                        new_business_form.save()
+                        messages.success(request, "Start up added successfully")
+
+                        return redirect('account:profile')
+                elif str(current_user_subscription.plan_category) == 'Startup':
+                    print("this is being startup")
+                    if all_biz_count >= 1:
+                        messages.error(request,
+                                       "You have already added {} startup(s) Please upgrade your membership to be able to add more startups".format(
+                                           all_biz_count))
+                    else:
+                        new_business_form = business_form.save(commit=False)
+                        new_business_form.user = request.user
+                        new_business_form.save()
+                        messages.success(request, "Start up added successfully")
+
+                        return redirect('account:profile')
+                elif str(current_user_subscription.plan_category) == 'Pro':
+                    print("this is being pro")
+                    if all_biz_count >= 3:
+                        messages.error(request,
+                                       "You have already added {} Startup(s) Please upgrade your membership to be able to add more startups".format(
+                                           all_biz_count))
+                    else:
+                        new_business_form = business_form.save(commit=False)
+                        new_business_form.user = request.user
+                        new_business_form.save()
+                        messages.success(request, "Start up added successfully")
+                        return redirect('account:profile')
+                elif str(current_user_subscription.plan_category) == 'Enterprise':
+                    print("this is being entreprsie")
+                    if all_biz_count >= 5:
+                        messages.error(request,
+                                       "You have already added {} Startup(s) Please upgrade your membership to be able to add more ideas".format(
+                                           all_biz_count))
+                    else:
+                        new_business_form = business_form.save(commit=False)
+                        new_business_form.user = request.user
+                        new_business_form.save()
+                        messages.success(request, "Start up added successfully")
+                        return redirect('account:profile')
             else:
-                messages.error(request, "Error updating")
+                messages.error(request, "Error adding startup")
     else:
         business_form = BusinessForm()
+
+    # add a direct business investment
+    if request.method == 'POST':
+        if 'biz_direct_button' in request.POST:
+            biz_direct_form = DirectInvestmentBizForm(data=request.POST, request=request)
+            if biz_direct_form.is_valid():
+                new_biz = biz_direct_form.save(commit=False)
+                new_biz.user = request.user
+                new_biz.save()
+                messages.success(request, "Start up updated successfully for direct investment")
+            else:
+                messages.error(request, "Error updating startup for direct investment")
+    else:
+        biz_direct_form = DirectInvestmentBizForm(request=request)
+
+    # add a direct idea investment
+    if request.method == 'POST':
+        if 'idea_direct_button' in request.POST:
+            idea_direct_form = DirectInvestmentIdeaForm(data=request.POST, request=request)
+            if idea_direct_form.is_valid():
+                new_biz = idea_direct_form.save(commit=False)
+                new_biz.user = request.user
+                new_biz.save()
+                messages.success(request, "Idea updated successfully for direct investment")
+            else:
+                messages.error(request, "Error updating idea for direct investment")
+    else:
+        idea_direct_form = DirectInvestmentIdeaForm(request=request)
 
     # report form
     if request.method == 'POST':
@@ -226,15 +361,16 @@ def profile(request):
 
     # Partner payment form
     if request.method == 'POST':
-        partner_notes_form = PartnersPaymentForm(data=request.POST)
-        if partner_notes_form.is_valid():
-            new_form = partner_notes_form.save(commit=False)
-            new_form.partner = partner_user
-            new_form.save()
-            messages.success(request, "Updated successfully")
-            return redirect('account:profile')
-        else:
-            messages.error(request, "Error updating")
+        if 'partner_notes_button' in request.POST:
+            partner_notes_form = PartnersPaymentForm(data=request.POST)
+            if partner_notes_form.is_valid():
+                new_form = partner_notes_form.save(commit=False)
+                new_form.partner = partner_user
+                new_form.save()
+                messages.success(request, "Note added successfully")
+                return redirect('account:profile')
+            else:
+                messages.error(request, "Error adding the note")
     else:
         partner_notes_form = PartnersPaymentForm()
 
@@ -265,18 +401,47 @@ def profile(request):
                                                     'provider_form': provider_form,
                                                     'provider': provider,
                                                     'provider_services': provider_services,
-                                                    'report_form': report_form
+                                                    'report_form': report_form,
+                                                    'key': key,
+                                                    'user_biz_direct': user_biz_direct,
+                                                    'biz_direct_form': biz_direct_form,
+                                                    'idea_direct_form': idea_direct_form,
+                                                    'idea_direct_invest': idea_direct_invest,
+                                                    'biz_direct_invest': biz_direct_invest,
+                                                    'current_user_subscription': current_user_subscription,
                                                     })
 
 
+def edit_partner_note(request, id):
+    partner_notes_form = None
+    note = PartnersPaymentNotes.objects.get(id=id)
+    if request.method == 'POST':
+        if 'partner_notes_button' in request.POST:
+            partner_notes_form = PartnersPaymentForm(data=request.POST, instance=note)
+            if partner_notes_form.is_valid():
+                new_form = partner_notes_form.save(commit=False)
+                new_form.save()
+                messages.success(request, "Note updated successfully")
+                return redirect('account:profile')
+            else:
+                messages.error(request, "Error updating the note")
+    else:
+        partner_notes_form = PartnersPaymentForm(instance=note)
+    return render(request, 'account/edit_note.html', {'partner_notes_form': partner_notes_form})
+
+
 def profiles_list(request):
+    current_user_subscription = UserSubscriptions.objects.get(user=request.user)
+    current_user_subscription = current_user_subscription.plan
+    current_user_subscription = str(current_user_subscription.plan_category)
     user_profiles = Profile.objects.filter(user__is_verified=True).exclude(user=request.user)
-    return render(request, 'account/profile_list.html', {'user_profiles': user_profiles})
+    print(user_profiles)
+    return render(request, 'account/profile_list.html', {'user_profiles': user_profiles,
+                                                         'current_user_subscription': current_user_subscription})
 
 
 def profile_list_investors(request):
     user_profiles = Profile.objects.filter(user__is_verified=True, user__is_investor=True).exclude(user=request.user)
-    print(user_profiles)
     return render(request, 'account/investors.html', {'user_profiles': user_profiles})
 
 
@@ -291,14 +456,27 @@ def profile_list_innovators(request):
 
 
 def profile_detail(request, id):
+    current_user_subscription = UserSubscriptions.objects.get(user=request.user)
+    current_user_subscription = current_user_subscription.plan
+    current_user_subscription = str(current_user_subscription.plan_category)
+    dir_idea_investors = IdeaDirectInvestors.objects.all()
+    dir_idea_investors_array = []
+    for dir in dir_idea_investors:
+        dir_idea_investors_array.append(dir.investor)
     current_user = get_object_or_404(Profile, user=request.user)
     user_profile = get_object_or_404(Profile, id=id)
-    startups = StartupBusiness.objects.filter(user=user_profile.user)
-    ideas = Ideas.objects.filter(user=user_profile.user)
+    startups = StartupBusiness.objects.filter(user=user_profile.user, set_direct_investment=False)
+    ideas = Ideas.objects.filter(user=user_profile.user, set_direct_investment=False)
+    biz_direct_investments = BusinessDirectInvestment.objects.filter(user=user_profile.user, approved=True)
+    idea_direct_investments = IdeaDirectInvestment.objects.filter(user=user_profile.user, approved=True)
     return render(request, 'account/profile_detail.html', {'user_profile': user_profile,
                                                            'startups': startups,
                                                            'ideas': ideas,
-                                                           'current_user': current_user})
+                                                           'current_user': current_user,
+                                                           'biz_direct_investments': biz_direct_investments,
+                                                           'idea_direct_investments': idea_direct_investments,
+                                                           'dir_idea_investors_array': dir_idea_investors_array,
+                                                           'current_user_subscription': current_user_subscription})
 
 
 def chat_view(request, receiver):
@@ -323,6 +501,9 @@ def chat_view(request, receiver):
 
 
 def user_search(request):
+    current_user_subscription = UserSubscriptions.objects.get(user=request.user)
+    current_user_subscription = current_user_subscription.plan
+    current_user_subscription = str(current_user_subscription.plan_category)
     form = SearchForm()
     query = None
     results = []
@@ -337,7 +518,8 @@ def user_search(request):
                   'account/search.html',
                   {'form': form,
                    'query': query,
-                   'results': results})
+                   'results': results,
+                   'current_user_subscription': current_user_subscription})
 
 
 @login_required

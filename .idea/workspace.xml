@@ -1,74 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="bd2f865d-fdd7-4f16-bb9f-55484a401156" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/account/templates/account/contact.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/account/templates/account/entreps.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/account/templates/account/innovators.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/account/templates/account/investors.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/account/webhooks.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/portal/static/portal/assets/img/rate.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/portal/templates/portal/plan_ent_detail.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/portal/templates/portal/plan_pro_detail.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/portal/templates/portal/plan_startup_detail.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/portal/templates/portal/rating.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/portal/templates/portal/request_sent.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/portal/templates/portal/sub_fail.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Centinum/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/Centinum/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Centinum/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/Centinum/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/account/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/account/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/account/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/account/forms.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/account/migrations/0001_initial.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/account/migrations/0002_chat.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/account/migrations/0003_auto_20190825_1155.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/account/migrations/0004_user_is_verified.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/account/migrations/0005_remove_user_is_verified.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/account/migrations/0006_user_is_verified.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/account/migrations/0007_verification.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/account/migrations/0008_user_is_partner.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/account/migrations/0009_auto_20191014_1235.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/account/migrations/0010_user_is_service_provider.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/account/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/account/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/account/templates/account/chats.html" beforeDir="false" afterPath="$PROJECT_DIR$/account/templates/account/chats.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/account/templates/account/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/account/templates/account/login.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/account/templates/account/profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/account/templates/account/profile.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/account/templates/account/profile_list.html" beforeDir="false" afterPath="$PROJECT_DIR$/account/templates/account/profile_list.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/account/templates/account/verification.html" beforeDir="false" afterPath="$PROJECT_DIR$/account/templates/account/verification.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/account/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/account/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/account/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/account/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/loginApp/templates/loginApp/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/loginApp/templates/loginApp/login.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/loginApp/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/loginApp/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/portal/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/portal/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/portal/decorators.py" beforeDir="false" afterPath="$PROJECT_DIR$/portal/decorators.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/portal/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/portal/forms.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/portal/migrations/0001_initial.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/portal/migrations/0002_businessimages.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/portal/migrations/0003_auto_20190830_1020.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/portal/migrations/0004_auto_20190902_1012.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/portal/migrations/0005_partners_servicecategories.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/portal/migrations/0006_partners_user.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/portal/migrations/0007_auto_20191014_1235.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/portal/migrations/0008_auto_20191014_1305.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/portal/migrations/0009_partnerspaymentnotes.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/portal/migrations/0010_partnerspaymentnotes_name.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/portal/migrations/0011_centinumservices_services.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/portal/migrations/0012_auto_20191016_1354.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/portal/migrations/0013_auto_20191016_1458.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/portal/migrations/0014_services_finished.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/portal/migrations/0015_serviceproviders.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/portal/migrations/0016_servicetimelinechats.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/portal/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/portal/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/portal/templates/portal/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/portal/templates/portal/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/portal/templates/portal/centinum.html" beforeDir="false" afterPath="$PROJECT_DIR$/portal/templates/portal/centinum.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/portal/templates/portal/charge.html" beforeDir="false" afterPath="$PROJECT_DIR$/portal/templates/portal/success_sub.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/portal/templates/portal/group_chat.html" beforeDir="false" afterPath="$PROJECT_DIR$/portal/templates/portal/group_chat.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/portal/templates/portal/plans.html" beforeDir="false" afterPath="$PROJECT_DIR$/portal/templates/portal/plans.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/portal/templates/portal/service_chat.html" beforeDir="false" afterPath="$PROJECT_DIR$/portal/templates/portal/service_chat.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/portal/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/portal/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/portal/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/portal/views.py" afterDir="false" />
-    </list>
+    <list default="true" id="bd2f865d-fdd7-4f16-bb9f-55484a401156" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -78,34 +11,10 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/portal/models.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1342">
-              <caret line="15" column="45" selection-start-line="15" selection-start-column="45" selection-end-line="15" selection-end-column="45" />
-              <folding>
-                <element signature="e#0#28#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/account/models.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="400">
-              <caret line="107" lean-forward="true" selection-start-line="107" selection-end-line="107" />
-              <folding>
-                <element signature="e#0#13#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/account/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4486">
-              <caret line="278" column="23" selection-start-line="278" selection-start-column="23" selection-end-line="278" selection-end-column="23" />
+            <state relative-caret-position="337">
+              <caret line="472" column="80" lean-forward="true" selection-start-line="472" selection-start-column="80" selection-end-line="472" selection-end-column="80" />
               <folding>
                 <element signature="e#0#78#0" expanded="true" />
               </folding>
@@ -114,56 +23,31 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/portal/templates/portal/plans.html">
+        <entry file="file://$PROJECT_DIR$/account/templates/account/profile_detail.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="183">
-              <caret line="40" column="15" selection-start-line="40" selection-start-column="15" selection-end-line="40" selection-end-column="40" />
-              <folding>
-                <element signature="n#style#0;n#p#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#span#1;n#p#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#p#1;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#span#0;n#p#1;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#span#1;n#p#1;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#p#2;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#span#0;n#p#2;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#p#3;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-                <element signature="e#1529#1536#1" expanded="true" />
-                <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#0;n#a#0;n#div#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#h5#0;n#div#0;n#a#0;n#div#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#h3#0;n#div#0;n#a#0;n#div#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#0;n#a#1;n#div#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#h5#0;n#div#0;n#a#1;n#div#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#h3#0;n#div#0;n#a#1;n#div#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#0;n#a#2;n#div#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#h5#0;n#div#0;n#a#2;n#div#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#h3#0;n#div#0;n#a#2;n#div#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#2;n#div#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#3;n#div#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/portal/templates/portal/centinum.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="404">
-              <caret line="49" column="66" selection-start-line="49" selection-start-column="66" selection-end-line="49" selection-end-column="66" />
-              <folding>
-                <element signature="n#style#0;n#h1#0;n#div#0;n#div#0;n#section#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#h1#0;n#div#0;n#div#0;n#section#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#img#0;n#p#0;n#div#0;n#div#0;n#div#0;n#div#1;n#div#0;n#div#0;n#section#0;n#!!top" expanded="true" />
-              </folding>
+            <state relative-caret-position="356">
+              <caret line="33" column="38" selection-start-line="33" selection-start-column="38" selection-end-line="33" selection-end-column="38" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/portal/templates/portal/home.html">
+        <entry file="file://$PROJECT_DIR$/portal/templates/portal/base.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-186">
-              <caret line="18" column="13" selection-start-line="18" selection-start-column="13" selection-end-line="18" selection-end-column="13" />
+            <state relative-caret-position="153">
+              <caret line="63" column="20" lean-forward="true" selection-start-line="63" selection-start-column="20" selection-end-line="63" selection-end-column="20" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Centinum/settings.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="173">
+              <caret line="195" lean-forward="true" selection-start-line="195" selection-end-line="195" />
+              <folding>
+                <element signature="e#309#318#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -171,14 +55,33 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/account/templates/account/profile.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="14" column="4" selection-start-line="14" selection-start-column="4" selection-end-line="26" selection-end-column="15" />
+            <state relative-caret-position="322">
+              <caret line="259" column="40" lean-forward="true" selection-start-line="259" selection-start-column="40" selection-end-line="259" selection-end-column="40" />
               <folding>
+                <element signature="n#style#0;n#p#0;n#tbody#0;n#table#0;n#div#0;n#div#1;n#div#0;n#div#2;n#div#0;n#div#1;n#div#0;n#div#2;n#div#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#span#0;n#p#0;n#td#1;n#tr#0;n#tbody#0;n#table#0;n#div#0;n#div#1;n#div#0;n#div#5;n#div#0;n#div#1;n#div#0;n#div#2;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#span#2;n#td#1;n#tr#0;n#tbody#0;n#table#0;n#div#0;n#div#1;n#div#0;n#div#5;n#div#0;n#div#1;n#div#0;n#div#2;n#div#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#span#0;n#p#1;n#td#1;n#tr#0;n#tbody#0;n#table#0;n#div#0;n#div#1;n#div#0;n#div#5;n#div#0;n#div#1;n#div#0;n#div#2;n#div#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#span#0;n#p#0;n#td#1;n#tr#0;n#tbody#0;n#table#0;n#div#0;n#div#1;n#div#0;n#div#6;n#div#0;n#div#1;n#div#0;n#div#2;n#div#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#span#0;n#p#1;n#td#1;n#tr#0;n#tbody#0;n#table#0;n#div#0;n#div#1;n#div#0;n#div#6;n#div#0;n#div#1;n#div#0;n#div#2;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#span#2;n#td#1;n#tr#0;n#tbody#0;n#table#0;n#div#0;n#div#1;n#div#0;n#div#6;n#div#0;n#div#1;n#div#0;n#div#2;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#p#0;n#div#0;n#div#0;n#div#14;n#div#0;n#div#1;n#div#0;n#div#2;n#div#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#p#1;n#div#0;n#div#0;n#div#22;n#div#0;n#div#1;n#div#0;n#div#2;n#div#0;n#!!top" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/account/templates/account/chats.html">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/account/templates/account/search.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-19">
+              <caret line="17" column="12" lean-forward="true" selection-start-line="17" selection-start-column="12" selection-end-line="17" selection-end-column="12" />
             </state>
           </provider>
         </entry>
@@ -186,8 +89,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/portal/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2211">
-              <caret line="561" column="36" lean-forward="true" selection-start-line="561" selection-start-column="36" selection-end-line="561" selection-end-column="36" />
+            <state relative-caret-position="581">
+              <caret line="245" column="113" selection-start-line="245" selection-start-column="113" selection-end-line="245" selection-end-column="113" />
               <folding>
                 <element signature="e#0#13#0" expanded="true" />
               </folding>
@@ -196,13 +99,19 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/portal/urls.py">
+        <entry file="file://$PROJECT_DIR$/portal/templates/portal/idea_detail.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="437">
-              <caret line="56" column="91" selection-start-line="56" selection-start-column="91" selection-end-line="56" selection-end-column="91" />
-              <folding>
-                <element signature="e#0#31#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="-5405">
+              <caret line="127" column="46" selection-start-line="127" selection-start-column="46" selection-end-line="127" selection-end-column="46" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/portal/templates/portal/business_detail.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="962">
+              <caret line="96" column="96" selection-start-line="96" selection-start-column="96" selection-end-line="96" selection-end-column="96" />
             </state>
           </provider>
         </entry>
@@ -223,57 +132,57 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/account/templates/account/verification_done.html" />
-        <option value="$PROJECT_DIR$/portal/templates/portal/home.html" />
-        <option value="$PROJECT_DIR$/portal/templates/portal/idea_members_search.html" />
-        <option value="$PROJECT_DIR$/portal/templates/portal/idea_detail.html" />
-        <option value="$PROJECT_DIR$/portal/templates/portal/business_detail.html" />
-        <option value="$PROJECT_DIR$/portal/templates/portal/stripe.html" />
-        <option value="$PROJECT_DIR$/Centinum/hooks.py" />
-        <option value="$PROJECT_DIR$/portal/templates/portal/service_detail.html" />
-        <option value="$PROJECT_DIR$/loginApp/views.py" />
-        <option value="$PROJECT_DIR$/account/templates/account/form_template8.html" />
-        <option value="$PROJECT_DIR$/account/forms.py" />
-        <option value="$PROJECT_DIR$/account/templates/account/contacts.html" />
         <option value="$PROJECT_DIR$/account/templates/account/login.html" />
         <option value="$PROJECT_DIR$/account/templates/account/chats.html" />
-        <option value="$PROJECT_DIR$/portal/templates/portal/group_chat.html" />
         <option value="$PROJECT_DIR$/portal/templates/portal/service_chat.html" />
         <option value="$PROJECT_DIR$/loginApp/templates/loginApp/login.html" />
-        <option value="$PROJECT_DIR$/portal/admin.py" />
-        <option value="$PROJECT_DIR$/account/templates/account/profile.html" />
-        <option value="$PROJECT_DIR$/portal/forms.py" />
         <option value="$PROJECT_DIR$/portal/templates/portal/rating.html" />
         <option value="$PROJECT_DIR$/account/templates/account/contact.html" />
         <option value="$PROJECT_DIR$/loginApp/urls.py" />
         <option value="$PROJECT_DIR$/portal/templates/portal/plan_cat_detail.html" />
         <option value="$PROJECT_DIR$/account/admin.py" />
         <option value="$USER_HOME$/Documents/views.py" />
-        <option value="$PROJECT_DIR$/portal/templates/portal/base.html" />
         <option value="$PROJECT_DIR$/portal/decorators.py" />
         <option value="$PROJECT_DIR$/account/templates/account/verification.html" />
         <option value="$USER_HOME$/views.py" />
         <option value="$PROJECT_DIR$/portal/templates/portal/sub_fail.html" />
         <option value="$PROJECT_DIR$/portal/templates/portal/success_sub.html" />
         <option value="$PROJECT_DIR$/account/webhooks.py" />
-        <option value="$PROJECT_DIR$/portal/models.py" />
-        <option value="$PROJECT_DIR$/Centinum/settings.py" />
         <option value="$PROJECT_DIR$/Centinum/urls.py" />
         <option value="$PROJECT_DIR$/portal/templates/portal/request_sent.html" />
         <option value="$PROJECT_DIR$/portal/templates/portal/plan_pro_detail.html" />
         <option value="$PROJECT_DIR$/portal/templates/portal/plan_ent_detail.html" />
         <option value="$PROJECT_DIR$/portal/templates/portal/plan_startup_detail.html" />
-        <option value="$PROJECT_DIR$/account/models.py" />
-        <option value="$PROJECT_DIR$/account/templates/account/profile_list.html" />
         <option value="$PROJECT_DIR$/account/templates/account/entreps.html" />
         <option value="$PROJECT_DIR$/account/templates/account/innovators.html" />
         <option value="$PROJECT_DIR$/account/templates/account/investors.html" />
-        <option value="$PROJECT_DIR$/account/views.py" />
-        <option value="$PROJECT_DIR$/account/urls.py" />
-        <option value="$PROJECT_DIR$/portal/urls.py" />
-        <option value="$PROJECT_DIR$/portal/views.py" />
         <option value="$PROJECT_DIR$/portal/templates/portal/plans.html" />
         <option value="$PROJECT_DIR$/portal/templates/portal/centinum.html" />
+        <option value="$PROJECT_DIR$/portal/templates/portal/service_detail.html" />
+        <option value="$PROJECT_DIR$/account/models.py" />
+        <option value="$PROJECT_DIR$/account/urls.py" />
+        <option value="$PROJECT_DIR$/account/templates/account/edit_note.html" />
+        <option value="$PROJECT_DIR$/Centinum/settings.py" />
+        <option value="$PROJECT_DIR$/portal/templates/portal/group_chat.html" />
+        <option value="$PROJECT_DIR$/portal/templates/portal/group_chats_idea.html" />
+        <option value="$PROJECT_DIR$/portal/admin.py" />
+        <option value="$PROJECT_DIR$/portal/templates/portal/idea_direct_investors.html" />
+        <option value="$PROJECT_DIR$/portal/templates/portal/biz_direct_investors.html" />
+        <option value="$PROJECT_DIR$/portal/models.py" />
+        <option value="$PROJECT_DIR$/portal/forms.py" />
+        <option value="$PROJECT_DIR$/portal/urls.py" />
+        <option value="$PROJECT_DIR$/portal/templates/portal/biz_members_search.html" />
+        <option value="$PROJECT_DIR$/portal/templates/portal/idea_members_search.html" />
+        <option value="$PROJECT_DIR$/portal/templates/portal/home.html" />
+        <option value="$PROJECT_DIR$/account/templates/account/profile_list.html" />
+        <option value="$PROJECT_DIR$/account/templates/account/search.html" />
+        <option value="$PROJECT_DIR$/account/templates/account/profile.html" />
+        <option value="$PROJECT_DIR$/portal/views.py" />
+        <option value="$PROJECT_DIR$/portal/templates/portal/business_detail.html" />
+        <option value="$PROJECT_DIR$/portal/templates/portal/idea_detail.html" />
+        <option value="$PROJECT_DIR$/account/views.py" />
+        <option value="$PROJECT_DIR$/account/templates/account/profile_detail.html" />
+        <option value="$PROJECT_DIR$/portal/templates/portal/base.html" />
       </list>
     </option>
   </component>
@@ -291,7 +200,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -331,27 +239,6 @@
               <item name="brainverse-centinum-full" type="b2602c69:ProjectViewProjectNode" />
               <item name="brainverse-centinum-full" type="462c0819:PsiDirectoryNode" />
               <item name="portal" type="462c0819:PsiDirectoryNode" />
-              <item name="static" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="brainverse-centinum-full" type="b2602c69:ProjectViewProjectNode" />
-              <item name="brainverse-centinum-full" type="462c0819:PsiDirectoryNode" />
-              <item name="portal" type="462c0819:PsiDirectoryNode" />
-              <item name="static" type="462c0819:PsiDirectoryNode" />
-              <item name="portal" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="brainverse-centinum-full" type="b2602c69:ProjectViewProjectNode" />
-              <item name="brainverse-centinum-full" type="462c0819:PsiDirectoryNode" />
-              <item name="portal" type="462c0819:PsiDirectoryNode" />
-              <item name="static" type="462c0819:PsiDirectoryNode" />
-              <item name="portal" type="462c0819:PsiDirectoryNode" />
-              <item name="assets" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="brainverse-centinum-full" type="b2602c69:ProjectViewProjectNode" />
-              <item name="brainverse-centinum-full" type="462c0819:PsiDirectoryNode" />
-              <item name="portal" type="462c0819:PsiDirectoryNode" />
               <item name="templates" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -365,6 +252,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -406,7 +294,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="1" width="1378" height="689" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -447,122 +334,6 @@
     </layout-to-restore>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/account/templates/registration/password_change_form.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="15" column="15" selection-end-line="102" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/account/templates/account/login.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="986">
-          <caret line="58" column="36" selection-start-line="58" selection-start-column="36" selection-end-line="66" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/account/forms.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1564">
-          <caret line="94" column="64" selection-start-line="94" selection-start-column="64" selection-end-line="94" selection-end-column="64" />
-          <folding>
-            <element signature="e#0#24#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/account/templates/account/chats.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="14" column="3" selection-start-line="14" selection-start-column="3" selection-end-line="26" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/portal/templates/portal/group_chat.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="19" column="34" lean-forward="true" selection-start-line="19" selection-start-column="34" selection-end-line="19" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/loginApp/templates/loginApp/login.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="214">
-          <caret line="86" column="30" lean-forward="true" selection-start-line="86" selection-start-column="30" selection-end-line="86" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/portal/admin.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="146" column="41" lean-forward="true" selection-start-line="146" selection-start-column="41" selection-end-line="146" selection-end-column="41" />
-          <folding>
-            <element signature="e#0#32#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/portal/templates/portal/business_detail.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1924">
-          <caret line="64" column="65" selection-start-line="64" selection-start-column="65" selection-end-line="64" selection-end-column="65" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/account/templates/account/contact.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="782">
-          <caret line="46" column="15" selection-start-line="46" selection-start-column="15" selection-end-line="46" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/loginApp/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="8" column="21" selection-start-line="8" selection-start-column="21" selection-end-line="8" selection-end-column="21" />
-          <folding>
-            <element signature="e#0#31#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/portal/templates/portal/rating.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="646">
-          <caret line="38" column="17" selection-start-line="38" selection-start-column="17" selection-end-line="38" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/loginApp/models.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/portal/templates/portal/service_chat.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-58">
-          <caret line="13" column="5" lean-forward="true" selection-start-line="13" selection-start-column="5" selection-end-line="13" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/portal/tests.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/portal/apps.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/loginApp/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="23" column="57" selection-start-line="23" selection-start-column="57" selection-end-line="23" selection-end-column="57" />
-          <folding>
-            <element signature="e#0#59#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/portal/templates/portal/paypal.html">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/account/migrations/0003_auto_20191113_2154.py" />
     <entry file="file://$PROJECT_DIR$/loginApp/admin.py">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -583,23 +354,6 @@
           <folding>
             <element signature="e#0#9#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/portal/forms.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1394">
-          <caret line="87" column="8" selection-start-line="87" selection-start-column="8" selection-end-line="87" selection-end-column="108" />
-          <folding>
-            <element signature="e#0#24#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/portal/templates/portal/base.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="474">
-          <caret line="313" column="122" selection-start-line="313" selection-start-column="122" selection-end-line="313" selection-end-column="122" />
         </state>
       </provider>
     </entry>
@@ -657,16 +411,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Centinum/settings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="347">
-          <caret line="53" column="22" selection-start-line="53" selection-start-column="22" selection-end-line="53" selection-end-column="22" />
-          <folding>
-            <element signature="e#309#318#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Centinum/urls.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="425">
@@ -677,45 +421,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/portal/templates/portal/service_detail.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="341">
-          <caret line="28" column="41" selection-start-line="28" selection-start-column="41" selection-end-line="28" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/portal/templates/portal/success_sub.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="10" column="67" selection-end-line="34" />
-          <folding>
-            <element signature="n#style#0;n#p#0;n#div#1;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/portal/templates/portal/request_sent.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
           <caret line="15" column="30" selection-start-line="15" selection-start-column="30" selection-end-line="15" selection-end-column="30" />
           <folding>
             <element signature="n#style#0;n#p#0;n#div#1;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/portal/templates/portal/plan_pro_detail.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="17" column="18" lean-forward="true" selection-start-line="17" selection-start-column="18" selection-end-line="17" selection-end-column="82" />
-          <folding>
-            <element signature="n#style#0;n#h1#0;n#div#0;n#div#0;n#section#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#p#0;n#div#0;n#div#0;n#section#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#span#0;n#p#0;n#div#0;n#div#0;n#section#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#p#1;n#div#0;n#div#0;n#section#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#hr#0;n#div#0;n#div#0;n#section#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#p#2;n#div#0;n#div#0;n#section#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#span#0;n#p#2;n#div#0;n#div#0;n#section#0;n#!!top" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -752,13 +463,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/account/templates/account/profile_list.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="11" column="234" selection-end-line="49" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/account/templates/account/entreps.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="474">
@@ -780,82 +484,127 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/account/urls.py">
+    <entry file="file://$PROJECT_DIR$/portal/templates/portal/service_detail.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="15" column="29" selection-start-line="15" selection-start-column="29" selection-end-line="15" selection-end-column="29" />
+        <state relative-caret-position="86">
+          <caret line="13" column="58" lean-forward="true" selection-start-line="13" selection-start-column="58" selection-end-line="13" selection-end-column="58" />
           <folding>
-            <element signature="e#0#31#0" expanded="true" />
+            <element signature="n#style#0;n#p#0;n#div#0;n#div#0;n#section#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#2;n#div#0;n#div#0;n#section#0;n#!!top" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/portal/models.py">
+    <entry file="file://$PROJECT_DIR$/portal/templates/portal/plan_pro_detail.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1342">
-          <caret line="15" column="45" selection-start-line="15" selection-start-column="45" selection-end-line="15" selection-end-column="45" />
+        <state relative-caret-position="295">
+          <caret line="24" column="12" selection-start-line="24" selection-start-column="12" selection-end-line="32" selection-end-column="19" />
           <folding>
-            <element signature="e#0#28#0" expanded="true" />
+            <element signature="n#style#0;n#h1#0;n#div#0;n#div#0;n#section#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#p#0;n#div#0;n#div#0;n#section#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#span#0;n#p#0;n#div#0;n#div#0;n#section#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#p#1;n#div#0;n#div#0;n#section#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#hr#0;n#div#0;n#div#0;n#section#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#p#2;n#div#0;n#div#0;n#section#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#span#0;n#p#2;n#div#0;n#div#0;n#section#0;n#!!top" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/account/models.py">
+    <entry file="file://$PROJECT_DIR$/portal/templates/portal/edit_business.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="400">
-          <caret line="107" lean-forward="true" selection-start-line="107" selection-end-line="107" />
+        <state relative-caret-position="-2654" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/portal/templates/portal/terms.html">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/portal/templates/portal/success_sub.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="10" column="67" selection-end-line="34" />
           <folding>
-            <element signature="e#0#13#0" expanded="true" />
+            <element signature="n#style#0;n#p#0;n#div#1;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/portal/urls.py">
+    <entry file="file://$PROJECT_DIR$/portal/templates/portal/edit_idea.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="437">
-          <caret line="56" column="91" selection-start-line="56" selection-start-column="91" selection-end-line="56" selection-end-column="91" />
+        <state relative-caret-position="221">
+          <caret line="13" column="39" lean-forward="true" selection-start-line="13" selection-start-column="39" selection-end-line="13" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/account/templates/account/edit_note.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="969">
+          <caret line="57" column="39" selection-start-line="57" selection-start-column="39" selection-end-line="57" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/portal/templates/portal/group_chat.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="129">
+          <caret line="14" column="5" lean-forward="true" selection-start-line="14" selection-start-column="5" selection-end-line="14" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/portal/templates/portal/group_chats_idea.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1275">
+          <caret line="75" column="37" selection-start-line="75" selection-start-column="37" selection-end-line="75" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/portal/admin.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3077">
+          <caret line="189" selection-start-line="189" selection-end-line="189" />
           <folding>
-            <element signature="e#0#31#0" expanded="true" />
+            <element signature="e#0#32#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/portal/templates/portal/home.html">
+    <entry file="file://$PROJECT_DIR$/portal/templates/portal/centinum.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-186">
-          <caret line="18" column="13" selection-start-line="18" selection-start-column="13" selection-end-line="18" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/account/templates/account/profile.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="14" column="4" selection-start-line="14" selection-start-column="4" selection-end-line="26" selection-end-column="15" />
+        <state relative-caret-position="221">
+          <caret line="13" column="27" lean-forward="true" selection-end-line="71" />
           <folding>
-            <element signature="n#style#0;n#span#0;n#p#0;n#td#1;n#tr#0;n#tbody#0;n#table#0;n#div#0;n#div#1;n#div#0;n#div#5;n#div#0;n#div#1;n#div#0;n#div#2;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#span#0;n#p#1;n#td#1;n#tr#0;n#tbody#0;n#table#0;n#div#0;n#div#1;n#div#0;n#div#5;n#div#0;n#div#1;n#div#0;n#div#2;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#span#0;n#p#0;n#td#1;n#tr#0;n#tbody#0;n#table#0;n#div#0;n#div#1;n#div#0;n#div#6;n#div#0;n#div#1;n#div#0;n#div#2;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#span#0;n#p#1;n#td#1;n#tr#0;n#tbody#0;n#table#0;n#div#0;n#div#1;n#div#0;n#div#6;n#div#0;n#div#1;n#div#0;n#div#2;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#p#0;n#div#0;n#div#0;n#section#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#img#0;n#p#0;n#div#0;n#div#0;n#div#0;n#div#1;n#div#0;n#div#0;n#section#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#p#1;n#div#0;n#div#0;n#section#0;n#!!top" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/account/views.py">
+    <entry file="file://$PROJECT_DIR$/account/templates/account/contact.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4486">
-          <caret line="278" column="23" selection-start-line="278" selection-start-column="23" selection-end-line="278" selection-end-column="23" />
-          <folding>
-            <element signature="e#0#78#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="372">
+          <caret line="76" column="14" lean-forward="true" selection-start-line="48" selection-start-column="8" selection-end-line="76" selection-end-column="14" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/portal/views.py">
+    <entry file="file://$PROJECT_DIR$/portal/templates/portal/biz_direct_investors.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2211">
-          <caret line="561" column="36" lean-forward="true" selection-start-line="561" selection-start-column="36" selection-end-line="561" selection-end-column="36" />
+        <state relative-caret-position="102">
+          <caret line="6" column="28" selection-start-line="6" selection-start-column="28" selection-end-line="6" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/portal/templates/portal/idea_direct_investors.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="6" selection-start-line="6" selection-end-line="6" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/account/forms.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
           <folding>
-            <element signature="e#0#13#0" expanded="true" />
+            <element signature="e#0#24#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -864,40 +613,172 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="183">
           <caret line="40" column="15" selection-start-line="40" selection-start-column="15" selection-end-line="40" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/portal/forms.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="88">
+          <caret line="98" column="102" selection-start-line="98" selection-start-column="102" selection-end-line="98" selection-end-column="102" />
           <folding>
-            <element signature="n#style#0;n#p#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#span#1;n#p#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#p#1;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#span#0;n#p#1;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#span#1;n#p#1;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#p#2;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#span#0;n#p#2;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#p#3;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="e#1529#1536#1" expanded="true" />
-            <element signature="n#style#0;n#div#0;n#div#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#0;n#a#0;n#div#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#h5#0;n#div#0;n#a#0;n#div#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#h3#0;n#div#0;n#a#0;n#div#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#0;n#a#1;n#div#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#h5#0;n#div#0;n#a#1;n#div#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#h3#0;n#div#0;n#a#1;n#div#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#0;n#a#2;n#div#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#h5#0;n#div#0;n#a#2;n#div#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#h3#0;n#div#0;n#a#2;n#div#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#2;n#div#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#3;n#div#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
+            <element signature="e#0#24#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/portal/templates/portal/centinum.html">
+    <entry file="file://$PROJECT_DIR$/portal/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="404">
-          <caret line="49" column="66" selection-start-line="49" selection-start-column="66" selection-end-line="49" selection-end-column="66" />
+        <state relative-caret-position="-54">
+          <caret line="34" column="42" selection-start-line="34" selection-start-column="42" selection-end-line="34" selection-end-column="42" />
           <folding>
-            <element signature="n#style#0;n#h1#0;n#div#0;n#div#0;n#section#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#h1#0;n#div#0;n#div#0;n#section#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#img#0;n#p#0;n#div#0;n#div#0;n#div#0;n#div#1;n#div#0;n#div#0;n#section#0;n#!!top" expanded="true" />
+            <element signature="e#0#28#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/account/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="122">
+          <caret line="15" column="4" lean-forward="true" selection-start-line="15" selection-start-column="4" selection-end-line="15" selection-end-column="23" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/account/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="323">
+          <caret line="19" column="82" lean-forward="true" selection-start-line="19" selection-start-column="82" selection-end-line="19" selection-end-column="82" />
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/portal/templates/portal/biz_members_search.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="159">
+          <caret line="22" column="33" selection-start-line="22" selection-start-column="33" selection-end-line="22" selection-end-column="33" />
+          <folding>
+            <element signature="n#style#0;n#a#0;n#h4#0;n#div#0;n#section#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/portal/templates/portal/idea_members_search.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="450">
+          <caret line="30" column="61" selection-start-line="30" selection-start-column="61" selection-end-line="30" selection-end-column="61" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/portal/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" column="75" selection-start-line="8" selection-start-column="75" selection-end-line="8" selection-end-column="75" />
+          <folding>
+            <element signature="e#0#31#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/portal/templates/portal/home.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="78">
+          <caret line="9" column="73" selection-start-line="9" selection-start-column="73" selection-end-line="9" selection-end-column="73" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/account/templates/account/profile_list.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="309">
+          <caret line="28" column="35" lean-forward="true" selection-start-line="28" selection-start-column="35" selection-end-line="28" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/account/templates/account/search.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-19">
+          <caret line="17" column="12" lean-forward="true" selection-start-line="17" selection-start-column="12" selection-end-line="17" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/portal/templates/portal/business_detail.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="962">
+          <caret line="96" column="96" selection-start-line="96" selection-start-column="96" selection-end-line="96" selection-end-column="96" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/portal/templates/portal/idea_detail.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-5405">
+          <caret line="127" column="46" selection-start-line="127" selection-start-column="46" selection-end-line="127" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/portal/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="581">
+          <caret line="245" column="113" selection-start-line="245" selection-start-column="113" selection-end-line="245" selection-end-column="113" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/account/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="337">
+          <caret line="472" column="80" lean-forward="true" selection-start-line="472" selection-start-column="80" selection-end-line="472" selection-end-column="80" />
+          <folding>
+            <element signature="e#0#78#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/account/templates/account/profile.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="322">
+          <caret line="259" column="40" lean-forward="true" selection-start-line="259" selection-start-column="40" selection-end-line="259" selection-end-column="40" />
+          <folding>
+            <element signature="n#style#0;n#p#0;n#tbody#0;n#table#0;n#div#0;n#div#1;n#div#0;n#div#2;n#div#0;n#div#1;n#div#0;n#div#2;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#span#0;n#p#0;n#td#1;n#tr#0;n#tbody#0;n#table#0;n#div#0;n#div#1;n#div#0;n#div#5;n#div#0;n#div#1;n#div#0;n#div#2;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#span#2;n#td#1;n#tr#0;n#tbody#0;n#table#0;n#div#0;n#div#1;n#div#0;n#div#5;n#div#0;n#div#1;n#div#0;n#div#2;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#span#0;n#p#1;n#td#1;n#tr#0;n#tbody#0;n#table#0;n#div#0;n#div#1;n#div#0;n#div#5;n#div#0;n#div#1;n#div#0;n#div#2;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#span#0;n#p#0;n#td#1;n#tr#0;n#tbody#0;n#table#0;n#div#0;n#div#1;n#div#0;n#div#6;n#div#0;n#div#1;n#div#0;n#div#2;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#span#0;n#p#1;n#td#1;n#tr#0;n#tbody#0;n#table#0;n#div#0;n#div#1;n#div#0;n#div#6;n#div#0;n#div#1;n#div#0;n#div#2;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#span#2;n#td#1;n#tr#0;n#tbody#0;n#table#0;n#div#0;n#div#1;n#div#0;n#div#6;n#div#0;n#div#1;n#div#0;n#div#2;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#p#0;n#div#0;n#div#0;n#div#14;n#div#0;n#div#1;n#div#0;n#div#2;n#div#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#p#1;n#div#0;n#div#0;n#div#22;n#div#0;n#div#1;n#div#0;n#div#2;n#div#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/account/templates/account/chats.html">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/account/templates/account/profile_detail.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="356">
+          <caret line="33" column="38" selection-start-line="33" selection-start-column="38" selection-end-line="33" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/portal/templates/portal/base.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="63" column="20" lean-forward="true" selection-start-line="63" selection-start-column="20" selection-end-line="63" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Centinum/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="173">
+          <caret line="195" lean-forward="true" selection-start-line="195" selection-end-line="195" />
+          <folding>
+            <element signature="e#309#318#0" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -1,0 +1,63 @@
+{% extends 'portal/base.html' %}
+
+{% block title %} Direct Investment {% endblock %}
+
+{% block body %}
+{% load static %}
+{% load crispy_forms_tags %}
+<ol class="breadcrumb">
+
+    <li class=""><a href="{% url 'portal:home' %}">Home</a></li>
+    <li class="active"><a>Direct Investment</a></li>
+
+</ol>
+<section id="team" class="pb-5">
+    {% if messages %}
+    {% for message in messages %}
+    {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+    <div class="alert alert-danger">
+        <strong>{{ message|escape }}</strong>
+    </div>
+    {% else %}
+    <div class="alert alert-success">
+        <strong>{{ message|escape }}</strong>
+    </div>
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+    <div class="container">
+        <!--<h5 class="section-title h1">Centinum Ventures</h5>-->
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2>Direct Investment</h2>
+                    </div>
+                    <div class="panel-body">
+                        <form action="" class="form-horizontal" method="post">
+                            <div class="form-group mb-n" style="margin:5px;">
+                                <div class="col-xs-12">
+                                    <!--<span class="input-group-addon">-->
+                                    <!--<i class="ti ti-user"></i>-->
+                                    <!--</span>-->
+                                    {% csrf_token %}
+                                    {{biz_invest_form|crispy}}
+                                </div>
+                            </div>
+                            <div class="panel-footer">
+                                <div class="clearfix">
+                                    <input type="submit" class="btn btn-primary pull-right" value="Send">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+

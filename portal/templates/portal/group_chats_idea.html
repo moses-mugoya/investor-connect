@@ -1,0 +1,110 @@
+{% extends 'portal/base.html' %}
+
+{% block title %} Chats {% endblock %}
+
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block body %}
+<ol class="breadcrumb">
+
+    <li class=""><a href="{% url 'portal:home' %}">Home</a></li>
+    <li class="active"><a href="{{idea.get_absolute_url}}">Idea Detail</a></li>
+    <li class="active"><a>Group Chats</a></li>
+
+</ol>
+<section id="team" class="pb-5">
+    {% if messages %}
+    {% for message in messages %}
+    {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+    <div class="alert alert-danger">
+        <strong>{{ message|escape }}</strong>
+    </div>
+    {% else %}
+    <div class="alert alert-success">
+        <strong>{{ message|escape }}</strong>
+    </div>
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+<style>
+.container {
+  border: 2px solid #dedede;
+  background-color: #f1f1f1;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px 0;
+}
+
+.darker {
+  border-color: #ccc;
+  background-color: #ddd;
+}
+
+.container::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.container img {
+  float: left;
+  max-width: 60px;
+  width: 100%;
+  margin-right: 20px;
+  border-radius: 50%;
+}
+
+.container img.right {
+  float: right;
+  margin-left: 20px;
+  margin-right:0;
+}
+
+.time-right {
+  float: right;
+  color: #aaa;
+}
+
+.time-left {
+  float: left;
+  color: #999;
+}
+</style>
+
+<div class="container col-md-10" id="chat">
+    <h2>Chat Messages for idea {{idea}}</h2>
+{% for chat in group_chats %}
+{% if chat.user == request.user %}
+<div class="container col-md-10 chat darker">
+  <img src="{% if chat.user.profiles.profile_image %}{{chat.user.profiles.profile_image.url}}{%else%}{% static 'portal/assets/img/profile.png' %}{% endif %}" style="width:100%;">
+  <p>{{chat.message}}</p>
+  <span class="time-right">{{chat.created}}</span>
+</div>
+{% else %}
+ <div class="container col-md-10 chat">
+  <img src="{% if chat.user.profiles.profile_image %}{{chat.user.profiles.profile_image.url}}{%else%}{% static 'portal/assets/img/profile.png' %}{% endif %}" style="width:100%;">
+  <p>{{chat.message}}</p>
+  <span class="time-right">{{chat.created}}</span>
+</div>
+{% endif %}
+{% empty %}
+<p>There are no chats at the moment</p>
+{% endfor %}
+<div class="container panel-footer col-md-10">
+    <form method="post" action=".">
+        {% csrf_token %}
+        {% include 'account/form_template7.html' %}
+        <span class="input-group-btn">
+            <input class="btn btn-default" type="submit" value="send">
+        </span>
+    </form>
+</div>
+
+</div>
+
+</section>
+
+{% endblock %}
+
+

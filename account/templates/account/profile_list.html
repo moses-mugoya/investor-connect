@@ -29,10 +29,14 @@
                     <h4 class="card-title">{{user_prof.user.username}}</h4>
                       <!--<h5>Looking for <span style="color:#222548">{{idea.interest}}</span></h5>-->
                     <!--<a class="btn" style="border-radius:20px; background-color:white;color: grey;border-color:grey"> 0 Likes</a>-->
-                    {% if request.user.profiles.paid %}
-                      <a href="{{user_prof.get_absolute_url}}" class="btn btn-primary" style="border-radius:20px"> View</a>
-                       {% else %}
-                      <a href="{% url 'portal:plans' %}" class="btn btn-primary" style="border-radius:20px">Upgrade To View</a>
+                    {% if current_user_subscription == 'Free' %}
+                    {% if user_prof.user.is_investor %}
+                    <a href="{% url 'portal:plans' %}" class="btn btn-primary" style="border-radius:20px">Upgrade To View</a>
+                    {% else %}
+                    <a href="{{user_prof.get_absolute_url}}" class="btn btn-primary" style="border-radius:20px"> View</a>
+                    {% endif %}
+                    {% else %}
+                    <a href="{{user_prof.get_absolute_url}}" class="btn btn-primary" style="border-radius:20px"> View</a>
                       {% endif %}
                       <!--<p class="card-text">This is basic card with image on top, title, description and button.</p>-->
                     <!--<a href="#" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i></a>-->

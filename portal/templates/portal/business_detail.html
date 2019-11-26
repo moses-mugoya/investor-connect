@@ -12,7 +12,7 @@
     {% if request.user in team_members %}
     <li class="active group"><a href="{% url 'portal:group' business.id %}">Group Chat</a></li>
     {% endif %}
-    {% if request.user == business.user %}
+    {% if request.user == business.user  or request.user in all_investors %}
     <li class="active group"><a href="{% url 'portal:group' business.id %}">Group Chat</a></li>
     {% endif %}
 
@@ -61,8 +61,12 @@
                     <a href="#tab-photos" role="tab" data-toggle="tab" class="list-group-item"><i
                             class="ti ti-camera"></i>Photos</a>
                     {% if request.user.is_investor and request.user not in all_investors%}
+                    {% if request.user not in all_investors %}
+                    {% if not business.set_direct_investment %}
                     <a href="#invest" role="tab" data-toggle="tab" class="list-group-item" style="color:#5b5be3"><i
                             class="ti ti-link"></i>Invest Now</a>
+                    {% endif %}
+                    {% endif %}
                     {% elif request.user.is_entrepreneur and business.user.username == request.user.username %}
                     <a href="#tab-edit" role="tab" data-toggle="tab" class="list-group-item"><i
                             class="ti ti-pencil"></i>Edit</a>
@@ -84,15 +88,15 @@
                             <div class="panel-body">
                                 <div class="table-responsive">
                                     <table class="table m-n">
+                                        {% if business.set_direct_investment %}
                                         <thead>
-                                        {% if investor != None %}
-                                        <tr>
-                                            <th style="font-size:20px;font-weight:bold">Full Name</th>
-                                        </tr>
-                                        {% endif %}
                                         </thead>
                                         <tbody>
-                                        {% for investor in investors %}
+                                        {% for investor in dir_biz_investors %}
+                                        {% if current_user_subscription == 'Free' %}
+                                        <p>Please upgrade your plan to be able to view investors</p>
+                                        <a href="{% url 'portal:plans' %}" class="btn btn-primary">Upgrade</a>
+                                        {% else %}
                                         <tr>
                                            <li class="media notification-message">
                                                 <a href="{{investor.investor.profiles.get_absolute_url}}">
@@ -104,9 +108,35 @@
                                                 </a>
                                             </li>
                                         </tr>
+                                        {% endif %}
                                         {% empty %}
                                         <p>This start up has no investors yet</p>
                                         {% endfor %}
+                                        {% else %}
+                                        <thead>
+                                        </thead>
+                                        <tbody>
+                                        {% for investor in investors %}
+                                        {% if current_user_subscription == 'Free' %}
+                                        <p>Please upgrade your plan to be able to view investors</p>
+                                        <a href="{% url 'portal:plans' %}" class="btn btn-primary">Upgrade</a>
+                                        {% else %}
+                                        <tr>
+                                           <li class="media notification-message">
+                                                <a href="{{investor.investor.profiles.get_absolute_url}}">
+                                                    <div class="media-left">
+                                                        <img class="img-circle avatar"
+                                                             src="{% if investor.investor.profiles.profile_image %}{{investor.investor.profiles.profile_image.url}}{%else%}{% static 'portal/assets/img/profile.png' %}{% endif %}"
+                                                             alt=""/>&nbsp;&nbsp;<span>{{investor.investor}}</span>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                        </tr>
+                                        {% endif %}
+                                        {% empty %}
+                                        <p>This start up has no investors yet</p>
+                                        {% endfor %}
+                                        {% endif %}
                                         </tbody>
                                     </table>
                                 </div><!-- /.table-responsive -->
@@ -119,7 +149,7 @@
                             <div class="panel-heading">
                                 <h2>Members</h2><br>
                                 {% if request.user == business.user %}
-                                <a href="{% url 'portal:search' business.id %}"> Add Member</a>
+                                <a href="{% url 'portal:biz_search' business.id %}"> Add Member</a>
                                 {% endif %}
                             </div>
                             <div class="panel-body">
@@ -155,52 +185,16 @@
                         </div>
                     </div> <!-- #tab-projects -->
 
-                    <div class="tab-pane" id="invest">
+                     <div class="tab-pane" id="invest">
                         <div class="panel panel-default">
-                            {% if profile.paid %}
                             <div class="panel-heading">
                                 <h2>Confirm Investment</h2>
                             </div>
                             <div class="panel-body">
-                                <h5>Financing you are looking for: <span style="color:green">KSH {{business.financing_you_are_looking_for}}</span></h5>
-                                <h5>Stake you are giving up: {{business.stake_you_are_giving_up}}%</h5>
-                                <h5>Minimum Financing: <span style="color:green">KSH {{business.minimum_financing}}</span> --> {{min_amount_per}}%</h5>
-                                <p>Please confirm that you want to invest in this start up.</p>
-                                {% if messages %}
-                                {% for message in messages %}
-                                {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
-                                <p style="color:red">{{message}}</p>
-                                {% else %}
-                                <p style="color:green">{{message}}</p>
-                                {% endif %}
-                                {% endfor %}
-                                {% endif %}
-                                <div class="col-md-10" style="margin:10px">
-                                        <form class="form-horizontal tabular-form" enctype="multipart/form-data" method="post">
-                                            {% csrf_token %}
-                                            {{biz_invest_form|crispy}}
-                                            <div class="panel-footer">
-                                                <div class="row">
-                                                    <div class="col-sm-8 col-sm-10">
-                                                        <a href=" {{ business.get_absolute_url }}" class="btn btn-primary">Go Back</a>
-                                                        <input type="submit" class="btn-success btn" value="Confirm">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                <!--<a href=" {{ business.get_absolute_url }}" class="btn btn-primary">Go Back</a>-->
-                                <!--<a href="{% url 'portal:invest_business' business.id %}" class="btn btn-success">Confirm</a>-->
+                                <p>Please confirm that you want to invest in this startup.</p>
+                                <a href=" {{ business.get_absolute_url }}" class="btn btn-primary">Go Back</a>
+                                <a href="{% url 'portal:invest_business' business.id %}" class="btn btn-success">Confirm</a>
                             </div> <!-- /.panel-body -->
-                            {% else %}
-                            <div class="panel-heading">
-                                <h2>Upgrade to PRO</h2>
-                            </div>
-                            <div class="panel-body">
-                                <p>Please upgrade to PRO to make an investment</p>
-                                <a href="{% url 'portal:plans' %}" class="btn btn-primary">Upgrade</a>
-                            </div>
-                            {% endif %}
                         </div>
                     </div> <!-- #tab-projects -->
                   <div class="tab-pane" id="join">
@@ -225,10 +219,12 @@
                                 <div class="table-responsive">
                                     <table class="table m-n">
                                         <thead>
+                                        {% if user_idea %}
                                         <tr>
                                             <th style="font-size:20px;font-weight:bold">Idea Name</th>
                                             <th style="font-size:20px;font-weight:bold">Description</th>
                                         </tr>
+                                        {% endif %}
                                         </thead>
                                         <tbody>
                                         {% for ide in user_idea %}
@@ -304,10 +300,6 @@
                                         <tr>
                                             <th>Sector</th>
                                             <td>{{business.sector}}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Interest</th>
-                                            <td>{{business.interest}}</td>
                                         </tr>
                                         </tbody>
                                     </table>

@@ -9,6 +9,12 @@
 
     <li><a href="{% url 'portal:home' %}">Home</a></li>
     <li class="active"><a href="{{idea.get_absolute_url}}">Idea Detail</a></li>
+    {% if request.user in team_members %}
+    <li class="active group"><a href="{% url 'portal:group_idea' idea.id %}">Group Chat</a></li>
+    {% endif %}
+    {% if request.user == idea.user  or request.user in all_investors %}
+    <li class="active group"><a href="{% url 'portal:group_idea' idea.id %}">Group Chat</a></li>
+    {% endif %}
 
 </ol>
 <div class="container-fluid">
@@ -53,8 +59,10 @@
                     <a href="#tab-members" role="tab" data-toggle="tab" class="list-group-item"><i
                             class="ti ti-user"></i>Members</a>
                     {% if request.user.is_investor and request.user not in all_investors %}
+                    {% if not idea.set_direct_investment %}
                     <a href="#invest" role="tab" data-toggle="tab" class="list-group-item" style="color:#5b5be3"><i
                             class="ti ti-link"></i>Invest Now</a>
+                    {% endif %}
                     {% elif request.user.is_innovator and idea.user.username == request.user.username %}
                     <a href="#tab-edit" role="tab" data-toggle="tab" class="list-group-item"><i
                             class="ti ti-pencil"></i>Edit Idea</a>
@@ -75,14 +83,38 @@
                             <div class="panel-body">
                                 <div class="table-responsive">
                                     <table class="table m-n">
+                                        {% if idea.set_direct_investment %}
                                         <thead>
-                                        {% if investor != None %}
-                                        <tr>
-                                            <th style="font-size:20px;font-weight:bold">Full Name</th>
-                                        </tr>
-                                        {% endif %}
                                         </thead>
                                         <tbody>
+                                        {% if current_user_subscription == 'Free' %}
+                                        <p>Please upgrade your plan to be able to view  investors</p>
+                                        <a href="{% url 'portal:plans' %}" class="btn btn-primary">Upgrade</a>
+                                        {% else %}
+                                        {% for investor in dir_idea_investors %}
+                                        <tr>
+                                            <li class="media notification-message">
+                                                <a href="{{team.member.profiles.get_absolute_url}}">
+                                                    <div class="media-left">
+                                                        <img class="img-circle avatar"
+                                                             src="{% if investor.investor.profiles.profile_image %}{{investor.investor.profiles.profile_image.url}}{%else%}{% static 'portal/assets/img/profile.png' %}{% endif %}"
+                                                             alt=""/>&nbsp;&nbsp;<span>{{investor.investor}}</span>
+                                                    </div>
+                                                </a>
+                                            </li>
+                                        </tr>
+                                        {% endif %}
+                                        {% empty %}
+                                        <p>This idea has no investors yet</p>
+                                        {% endfor %}
+                                        {% else %}
+                                        <thead>
+                                        </thead>
+                                        <tbody>
+                                        {% if current_user_subscription == 'Free' %}
+                                        {% else %}
+                                        <p>Please upgrade your plan to be able to view  investors</p>
+                                        <a href="{% url 'portal:plans' %}" class="btn btn-primary">Upgrade</a>
                                         {% for investor in investors %}
                                         <tr>
                                             <li class="media notification-message">
@@ -95,9 +127,11 @@
                                                 </a>
                                             </li>
                                         </tr>
+                                        {% endif %}
                                         {% empty %}
                                         <p>This idea has no investors yet</p>
                                         {% endfor %}
+                                        {% endif %}
                                         </tbody>
                                     </table>
                                 </div><!-- /.table-responsive -->
@@ -180,10 +214,12 @@
                                 <div class="table-responsive">
                                     <table class="table m-n">
                                         <thead>
+                                        {% if user_idea %}
                                         <tr>
                                             <th style="font-size:20px;font-weight:bold">Idea Name</th>
                                             <th style="font-size:20px;font-weight:bold">Description</th>
                                         </tr>
+                                        {% endif %}
                                         </thead>
                                         <tbody>
                                         {% for ide in user_idea %}
